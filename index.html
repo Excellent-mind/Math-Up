@@ -4068,6 +4068,7 @@ function home(){
     $("total").textContent = "Worksheets never run out. Level up to unlock harder skills!";
     drawMap();                             // the route map: children can pick any topic they've reached
   }
+  if (MU.young()) $("bossBtn").hidden = true;      // ages 4-6 open Boss Battle from the lessons home; older kids have no lessons home, so it stays here for them
   if (window.StuChip) StuChip.mountAll(__root);
   show("home");
 }
