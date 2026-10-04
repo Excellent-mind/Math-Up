@@ -3076,7 +3076,21 @@ const Upi = (() => {
   let pickedVoice = null;
   function chooseVoice(){ return typeof muBestVoice === "function" ? muBestVoice() : null; }
   if ("speechSynthesis" in window) speechSynthesis.addEventListener("voiceschanged", () => { pickedVoice = chooseVoice(); });
+  // Recorded voice first: if voice/<words-joined-by-dashes>.mp3 exists it plays, otherwise the phone's own voice reads it (same rule as the lessons page).
+  const recMissing = new Set(), recSlug = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   function speak(text, onEnd){
+    const key = recSlug(text);
+    if (key && voiceOn && !(window.I18N && I18N.on()) && !recMissing.has(key)){
+      try { speechSynthesis.cancel(); } catch (e) {}
+      const a = new Audio("voice/" + key + ".mp3"); let done = false, stopTTS = null, fell = false;
+      const end = () => { if (!done){ done = true; onEnd(); } };
+      const fallback = () => { if (done || fell) return; fell = true; recMissing.add(key); stopTTS = speakTTS(text, end); };
+      a.onended = end; a.onerror = fallback; a.play().catch(fallback);
+      return () => { try { a.pause(); } catch (e) {} if (stopTTS) stopTTS(); end(); };
+    }
+    return speakTTS(text, onEnd);
+  }
+  function speakTTS(text, onEnd){
     // cleaned text: no emoji, no symbols read out
     const clean = (window.I18N && I18N.on() ? I18N.speechText(text) : String(text)).replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu, "").replace(/×/g, " times ").replace(/−/g, " minus ").replace(/\+/g, " plus ").replace(/=/g, " equals ");
     if (!voiceOn || !("speechSynthesis" in window) || !clean.trim()){ const t = setTimeout(onEnd, Math.min(9000, 1500 + clean.length * 65)); return () => clearTimeout(t); }
