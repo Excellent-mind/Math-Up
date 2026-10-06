@@ -2193,6 +2193,18 @@ function muBestVoice(){
 // Math Up: connects the pages to your Google Script.
 // Paste your web app URL below (Deploy > Manage deployments > copy the Web app URL).
 const MU_API = "https://script.google.com/macros/s/AKfycbw1WmAvFdkZUl_fAZ73x8uQWYNtWo09SOJ5ejIjaVsLLHzxeiCPNkJ-UyO6X4dWyvTj1Q/exec";
+// Wake the Google Script while the person is still typing, so their first real tap isn't the slow one.
+(function warmServer(){
+  const K = "mathup:warm";
+  const ping = () => { try {
+    if (!navigator.onLine || MU_API.indexOf("PASTE") === 0) return;
+    const last = Number(sessionStorage.getItem(K) || 0); if (Date.now() - last < 240000) return;
+    sessionStorage.setItem(K, String(Date.now()));
+    fetch(MU_API, { mode: "no-cors", cache: "no-store" }).catch(() => {});
+  } catch (e) {} };
+  setTimeout(ping, 800);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) ping(); });
+})();
 
 
 // Shared learning rules: points, goal times and how we spot a child's limitations.
