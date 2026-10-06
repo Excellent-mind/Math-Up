@@ -1068,33 +1068,9 @@ input,select,textarea{font-size:max(16px,1em)}
 .pg[data-p="login"] .status:empty{margin:0!important}
 .pg[data-p="login"] .alt{margin:12px 0 0!important;font-size:14px!important;padding:4px 10px!important}
 @media (max-height:640px){.pg[data-p="login"] .page{padding-top:10px;padding-bottom:10px}.pg[data-p="login"] .topbar{margin-bottom:10px}.pg[data-p="login"] .brand-text small{display:none}.pg[data-p="login"] .sub{margin-bottom:10px!important}.pg[data-p="login"] .tabs{margin-bottom:10px!important}.pg[data-p="login"] .mu-pin{padding:8px 0 6px!important}}
-/* ===== loading star ===== */
-#mu-load{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;background:rgba(20,40,75,.38);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;transition:opacity .2s ease;pointer-events:none}
-#mu-load.on{opacity:1;pointer-events:auto}
-#mu-load .box{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 30px 18px;background:#fff;border:3px solid #14284B;border-radius:26px;box-shadow:0 6px 0 #14284B;min-width:170px;transform:scale(.9);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
-#mu-load.on .box{transform:none}
-#mu-load .stage{position:relative;width:120px;height:120px}
-#mu-load .glow{position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle,rgba(255,212,59,.95) 0%,rgba(255,169,77,.5) 40%,rgba(255,212,59,0) 70%);animation:muGlow 1.2s ease-in-out infinite alternate}
-#mu-load .ring{position:absolute;inset:4px;border-radius:50%;border:3px dashed rgba(31,94,255,.28);animation:muSpin 6s linear infinite reverse}
-#mu-load .stage{perspective:420px}
-#mu-load .star{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;transform-style:preserve-3d;animation:muSpin3d 1.8s cubic-bezier(.45,.05,.55,.95) infinite}
-#mu-load .star .ly{position:absolute;inset:0;backface-visibility:visible}
-#mu-load .star .bk{transform:translateZ(-6px) rotateY(180deg)}
-#mu-load .star svg,#mu-load .sp svg{display:block;width:100%;height:100%}
-#mu-load .orbit{position:absolute;inset:0;animation:muSpin 2.4s linear infinite}
-#mu-load .sp{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;animation:muTwinkle 1s ease-in-out infinite}
-#mu-load .sp:nth-child(1){left:50%;top:6%}#mu-load .sp:nth-child(2){left:92%;top:36%;animation-delay:.2s;width:12px;height:12px}
-#mu-load .sp:nth-child(3){left:78%;top:88%;animation-delay:.4s}#mu-load .sp:nth-child(4){left:20%;top:86%;animation-delay:.6s;width:11px;height:11px}
-#mu-load .sp:nth-child(5){left:6%;top:38%;animation-delay:.8s;width:14px;height:14px}
-#mu-load .msg{font:600 16px/1.3 "Fredoka",system-ui,sans-serif;color:#14284B;text-align:center;max-width:220px}
-#mu-load .msg i{display:inline-block;animation:muDots 1.2s steps(4,end) infinite;width:1.1em;text-align:left;overflow:hidden;vertical-align:bottom;font-style:normal}
-#mu-load .hint{font:500 13px/1.35 "Fredoka",system-ui,sans-serif;color:#54627A;text-align:center;max-width:220px}
-@keyframes muSpin{to{transform:rotate(360deg)}}
-@keyframes muSpin3d{0%{transform:rotateY(0deg) translateY(0)}50%{transform:rotateY(180deg) translateY(-6px)}100%{transform:rotateY(360deg) translateY(0)}}
-@keyframes muGlow{from{transform:scale(.82);opacity:.6}to{transform:scale(1.08);opacity:1}}
-@keyframes muTwinkle{0%,100%{transform:scale(.2) rotate(0);opacity:0}50%{transform:scale(1) rotate(90deg);opacity:1}}
-@keyframes muDots{from{width:0}to{width:1.1em}}
-@media (prefers-reduced-motion:reduce){#mu-load .star{animation:muSpin3d 4s linear infinite}#mu-load .orbit,#mu-load .ring{animation:none}#mu-load .sp{animation-duration:2s}#mu-load .glow{animation:none}}
+/* ===== slow-server hint (no popup, no star) ===== */
+#mu-load{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:3000;max-width:min(86vw,340px);padding:10px 16px;border-radius:16px;background:#fff;border:2px solid #E5E5E5;box-shadow:0 4px 0 #E5E5E5;font:500 14px/1.35 "Fredoka",system-ui,sans-serif;color:#54627A;text-align:center;opacity:0;transform:translate(-50%,10px);transition:opacity .25s,transform .25s;pointer-events:none}
+#mu-load.on{opacity:1;transform:translate(-50%,0)}
 
 /* worksheet: sentence questions read at a proper size with the answer box on the right */
 .pg[data-p="print"] .qs.storyq > div{font-size:24px;gap:14px;white-space:normal}
@@ -1133,20 +1109,11 @@ input,select,textarea{font-size:max(16px,1em)}
 #mu-pow b i{font-style:normal;background:linear-gradient(90deg,#2FB5FF,#3D6BFF 55%,#9B4DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
 #mu-pow[hidden]{display:none}
 @media print{#mu-pow,#mu-splash{display:none!important}}
-#mu-splash{position:fixed;inset:0;z-index:5000;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(24vh + env(safe-area-inset-top,0px)) 24px calc(48px + env(safe-area-inset-bottom,0px));background:#fff;background-image:linear-gradient(#DCE8F7 1px,transparent 1px),linear-gradient(90deg,#DCE8F7 1px,transparent 1px);background-size:28px 28px;transition:opacity .45s ease}
+#mu-splash{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;background:#1F5EFF;transition:opacity .35s ease}
 #mu-splash.on{display:flex}
 #mu-splash.out{opacity:0;pointer-events:none}
-#mu-splash .sp-app{display:flex;flex-direction:column;align-items:center;gap:10px}
-#mu-splash .sp-mark{width:108px;height:108px;border-radius:30px;box-shadow:0 7px 0 #14284B,0 0 0 3px #14284B;animation:spPop .7s cubic-bezier(.34,1.56,.64,1) both}
+#mu-splash .sp-mark{width:120px;height:120px;filter:drop-shadow(0 6px 0 rgba(8,36,140,.45));animation:duoDrop .9s var(--d-spring,cubic-bezier(.34,1.56,.64,1)) both}
 #mu-splash .sp-mark svg{display:block;width:100%;height:100%}
-#mu-splash .sp-name{margin-top:8px;font:700 46px/1 "Fredoka",system-ui,sans-serif;letter-spacing:-.02em;color:#14284B;animation:spUp .5s .25s ease-out both}
-#mu-splash .sp-tag{font:500 16px/1.2 "Fredoka",system-ui,sans-serif;color:#54627A;animation:spUp .5s .35s ease-out both}
-#mu-splash .sp-pow{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 26px 16px;border-radius:22px;background:#0B1020;box-shadow:0 10px 28px rgba(20,40,75,.25);animation:spUp .5s .55s ease-out both}
-#mu-splash .sp-pow > span:first-child{font:500 12px/1 "Fredoka",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#9AA6BD}
-#mu-splash .sp-em{width:74px;height:64px}
-#mu-splash .sp-em svg{display:block;width:100%;height:100%}
-#mu-splash .sp-pow b{font:700 17px/1 "Fredoka",system-ui,sans-serif;letter-spacing:.12em;color:#fff}
-#mu-splash .sp-pow b i{font-style:normal;background:linear-gradient(90deg,#2FB5FF,#3D6BFF 55%,#9B4DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
 @keyframes spPop{from{transform:scale(.4) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
 @keyframes spUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){#mu-splash *{animation:none!important}}
@@ -1190,9 +1157,6 @@ input,select,textarea{font-size:max(16px,1em)}
 .pg.duo-in>.page,.pg.duo-in>.wrap{animation:duoSlide .28s cubic-bezier(.22,1,.36,1)}
 .pg.duo-in .lv{animation:duoPop .45s var(--d-spring) backwards}
 .pg.duo-in .lv:nth-child(2){animation-delay:.05s}.pg.duo-in .lv:nth-child(3){animation-delay:.1s}.pg.duo-in .lv:nth-child(4){animation-delay:.15s}.pg.duo-in .lv:nth-child(n+5){animation-delay:.2s}
-/* splash: icon drops and squashes, bar fills */
-#mu-splash .sp-mark{animation:duoDrop .9s var(--d-spring) both!important;box-shadow:0 7px 0 #1899D6!important}
-#mu-splash .sp-app::after{content:"";width:170px;height:12px;border-radius:99px;margin-top:22px;background:linear-gradient(var(--d-gold),var(--d-gold)) left/0% 100% no-repeat,var(--d-line);animation:duoBoot 2s .3s cubic-bezier(.4,0,.2,1) forwards}
 /* loader: top bar + bouncing dots when the server is slow */
 #duo-load{position:fixed;left:0;right:0;top:0;height:5px;z-index:6000;pointer-events:none;opacity:0;transition:opacity .2s;background:linear-gradient(90deg,transparent,var(--d-blue),var(--d-green),transparent) 0/40% 100% no-repeat;animation:duoSweep 1s linear infinite}
 #duo-load.on{opacity:1}
@@ -1228,18 +1192,24 @@ input,select,textarea{font-size:max(16px,1em)}
 <div id="app"></div>
 <footer id="mu-pow" data-noi18n><span>Powered by</span><span class="em"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 104" aria-hidden="true"><defs><linearGradient id="emFG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FB5FF"/><stop offset=".55" stop-color="#3D6BFF"/><stop offset="1" stop-color="#9B4DFF"/></linearGradient></defs><path d="M47 6l4 9M60 2v10M73 6l-4 9" stroke="url(#emFG)" stroke-width="5" stroke-linecap="round" transform="translate(16 0)"/><path d="M54 28L22 43a6 6 0 0 0-3.5 5.5v19a6 6 0 0 0 3.5 5.5L54 88" fill="none" stroke="#14284B" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/><path d="M30 56L56 44" stroke="#14284B" stroke-width="11" stroke-linecap="round"/><path d="M30 72l24 10" stroke="#14284B" stroke-width="3" stroke-linecap="round" opacity=".7"/><path d="M52 33l12-6 16 23 22-27a4 4 0 0 1 7 2.6V86l-12 8V45L80 66 62 45v43l-10 5z" fill="url(#emFG)"/><rect x="66" y="74" width="28" height="7" rx="3.5" fill="#14284B"/><rect x="69" y="84" width="22" height="7" rx="3.5" fill="#14284B"/><path d="M73 94h14a7 7 0 0 1-14 0z" fill="#14284B"/></svg></span><b>Excellent <i>Mindblow</i></b></footer>
 <div id="mu-splash" data-noi18n aria-hidden="true">
-  <div class="sp-app"><span class="sp-mark"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="spG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3D7BFF"/><stop offset="1" stop-color="#1A4FE0"/></linearGradient></defs><rect x="1.5" y="1.5" width="45" height="45" rx="13" fill="url(#spG)"/><path d="M8 9.5q8-5 20-4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".35"/><rect x="9.5" y="27" width="7.5" height="11.5" rx="2.2" fill="#fff"/><rect x="20.25" y="20.5" width="7.5" height="18" rx="2.2" fill="#fff"/><rect x="31" y="14" width="7.5" height="24.5" rx="2.2" fill="#fff"/><path d="M34.75 3.5l1.9 4.1 4.5.5-3.35 3 .95 4.4-4-2.3-4 2.3.95-4.4-3.35-3 4.5-.5z" fill="#FFD43B" stroke="#14284B" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="sp-name">Math Up</span><span class="sp-tag">Maths practice · Ages 4–12</span></div>
-  <div class="sp-pow"><span>Powered by</span><span class="sp-em"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 104" aria-hidden="true"><defs><linearGradient id="emSG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FB5FF"/><stop offset=".55" stop-color="#3D6BFF"/><stop offset="1" stop-color="#9B4DFF"/></linearGradient></defs><path d="M47 6l4 9M60 2v10M73 6l-4 9" stroke="url(#emSG)" stroke-width="5" stroke-linecap="round" transform="translate(16 0)"/><path d="M54 28L22 43a6 6 0 0 0-3.5 5.5v19a6 6 0 0 0 3.5 5.5L54 88" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/><path d="M30 56L56 44" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round"/><path d="M30 72l24 10" stroke="#C9CED8" stroke-width="3" stroke-linecap="round" opacity=".7"/><path d="M52 33l12-6 16 23 22-27a4 4 0 0 1 7 2.6V86l-12 8V45L80 66 62 45v43l-10 5z" fill="url(#emSG)"/><rect x="66" y="74" width="28" height="7" rx="3.5" fill="#FFFFFF"/><rect x="69" y="84" width="22" height="7" rx="3.5" fill="#FFFFFF"/><path d="M73 94h14a7 7 0 0 1-14 0z" fill="#FFFFFF"/></svg></span><b>EXCELLENT <i>MINDBLOW</i></b></div>
+  <span class="sp-mark"><svg viewBox="4 0 42 44" aria-hidden="true"><rect x="9.5" y="27" width="7.5" height="11.5" rx="2.2" fill="#fff"/><rect x="20.25" y="20.5" width="7.5" height="18" rx="2.2" fill="#fff"/><rect x="31" y="14" width="7.5" height="24.5" rx="2.2" fill="#fff"/><path d="M34.75 3.5l1.9 4.1 4.5.5-3.35 3 .95 4.4-4-2.3-4 2.3.95-4.4-3.35-3 4.5-.5z" fill="#FFD43B" stroke="#14284B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
 </div>
 <script>
-// launch screen: "Math Up · Powered by Excellent Mindblow", once each time the app is opened
+// voice speed (lower = slower). tts = the phone's own voice, clip = the recorded voice/*.mp3 files
+window.MU_VOICE = { tts: 0.8, clip: 0.9 };
+// launch screen: just the Math Up logo on blue (like Duolingo), once each time the app is opened
 (function(){
   var sp = document.getElementById("mu-splash"); if (!sp) return;
   var seen = false; try { seen = sessionStorage.getItem("mathup:splash") === "1"; sessionStorage.setItem("mathup:splash", "1"); } catch (e) {}
   if (seen) { sp.remove(); return; }
+  var meta = document.querySelector('meta[name="theme-color"]'), old = meta && meta.content;
+  if (meta) meta.content = "#1F5EFF";                       // phone status bar matches the splash
   sp.classList.add("on");
-  var close = function(){ sp.classList.add("out"); setTimeout(function(){ sp.remove(); }, 450); };
-  var t = setTimeout(close, 2200); sp.addEventListener("click", function(){ clearTimeout(t); close(); });
+  var t0 = Date.now(), closed = false;
+  var close = function(){ if (closed) return; closed = true; if (meta) meta.content = old; sp.classList.add("out"); setTimeout(function(){ sp.remove(); }, 400); };
+  var ready = function(){ setTimeout(close, Math.max(0, 1300 - (Date.now() - t0))); };   // at least 1.3 s, then as soon as the app has loaded
+  if (document.readyState === "complete") ready(); else addEventListener("load", ready);
+  setTimeout(close, 3500); sp.addEventListener("click", close);
 })();
 // the "Powered by" footer sits under every page except full-screen games
 (function(){
@@ -2352,25 +2322,17 @@ function pinDots(inp){
 window.EYE = open => open
   ? '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>'
   : '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.2" fill="currentColor"/></svg>';
-// In-app loading: a spinning star with a glow and sparkles. Shown for server waits the child or parent is waiting on.
+// In-app loading: the top bar and bouncing dots (Duo layer) already show activity. This only adds a small hint when the server is slow to wake.
 const MULoad = (() => {
-  let n = 0, el = null, showT = 0, slowT = 0;
+  let n = 0, el = null, slowT = 0;
   const ms = () => window.I18N && I18N.lang && I18N.lang() === "ms";
-  const SPK = '<svg viewBox="0 0 16 16"><path d="M8 0l1.8 6.2L16 8l-6.2 1.8L8 16l-1.8-6.2L0 8l6.2-1.8z" fill="#FFE066" stroke="#F59F00" stroke-width=".8"/></svg>';
-  const STAR = '<svg viewBox="0 0 64 64"><defs><linearGradient id="mlS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF3BF"/><stop offset=".45" stop-color="#FFD43B"/><stop offset="1" stop-color="#F59F00"/></linearGradient></defs><path d="M32 4l8.2 17.6 19.3 2.2-14.3 13.1 3.9 19.1L32 46.4 14.9 56l3.9-19.1L4.5 23.8l19.3-2.2z" fill="url(#mlS)" stroke="#14284B" stroke-width="3.2" stroke-linejoin="round"/><path d="M24 22.5l5.5-.7 2.5-5.4" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85"/></svg>';
-  // a thick 3D star: a front face, a back face and edge layers in between, spun on its Y axis
-  const SP = "M32 4l8.2 17.6 19.3 2.2-14.3 13.1 3.9 19.1L32 46.4 14.9 56l3.9-19.1L4.5 23.8l19.3-2.2z";
-  const EDGE = c => `<svg viewBox="0 0 64 64"><path d="${SP}" fill="${c}" stroke="${c}" stroke-width="3.2" stroke-linejoin="round"/></svg>`;
-  const STAR3D = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5].map(z => `<div class="ly" style="transform:translateZ(${z}px)">${EDGE(Math.abs(z) === 5 ? "#14284B" : Math.abs(z) > 2 ? "#F59F00" : "#E8890C")}</div>`).join("")
-    + `<div class="ly" style="transform:translateZ(6px)">${STAR}</div><div class="ly bk">${STAR}</div>`;
-  function make(){ el = document.createElement("div"); el.id = "mu-load"; el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite");
-    el.innerHTML = `<div class="box"><div class="stage"><div class="glow"></div><div class="ring"></div><div class="orbit">${SPK.repeat(5).replace(/<svg/g, '<span class="sp"><svg').replace(/<\/svg>/g, "</svg></span>")}</div><div class="star">${STAR3D}</div></div><div class="msg"></div><div class="hint"></div></div>`;
-    document.body.appendChild(el); }
-  function show(){ if (!el) make(); el.querySelector(".msg").innerHTML = (ms() ? "Sekejap ya" : "Loading") + "<i>...</i>"; el.querySelector(".hint").textContent = ""; void el.offsetWidth; el.classList.add("on");
-    slowT = setTimeout(() => { if (el) el.querySelector(".hint").textContent = ms() ? "Sedang hidupkan pelayan. Kali pertama boleh ambil masa hingga 20 saat." : "Waking up the server. The first try can take up to 20 seconds."; }, 4000); }
-  function hide(){ clearTimeout(showT); clearTimeout(slowT); if (el) el.classList.remove("on"); }
+  function slow(){ if (document.getElementById("st")) return;      // login page shows its own hint
+    if (!el){ el = document.createElement("div"); el.id = "mu-load"; el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite"); document.body.appendChild(el); }
+    el.textContent = ms() ? "Sedang hidupkan pelayan. Kali pertama boleh ambil masa hingga 20 saat." : "Waking up the server. The first try can take up to 20 seconds.";
+    void el.offsetWidth; el.classList.add("on"); }
+  function hide(){ clearTimeout(slowT); if (el) el.classList.remove("on"); }
   return {
-    start(){ if (n++ === 0){ clearTimeout(showT); showT = setTimeout(show, 300); } },
+    start(){ if (n++ === 0){ clearTimeout(slowT); slowT = setTimeout(slow, 4000); } },
     end(){ n = Math.max(0, n - 1); if (!n) hide(); },
     async wrap(p){ this.start(); try { return await p; } finally { this.end(); } }
   };
@@ -3195,7 +3157,7 @@ const Upi = (() => {
       const a = new Audio("voice/" + key + ".mp3"); let done = false, stopTTS = null, fell = false;
       const end = () => { if (!done){ done = true; onEnd(); } };
       const fallback = () => { if (done || fell) return; fell = true; recMissing.add(key); stopTTS = speakTTS(text, end); };
-      a.onended = end; a.onerror = fallback; a.play().catch(fallback);
+      a.defaultPlaybackRate = a.playbackRate = (window.MU_VOICE || {}).clip || .9; a.onended = end; a.onerror = fallback; a.play().catch(fallback);
       return () => { try { a.pause(); } catch (e) {} if (stopTTS) stopTTS(); end(); };
     }
     return speakTTS(text, onEnd);
@@ -3208,10 +3170,10 @@ const Upi = (() => {
     const u = new SpeechSynthesisUtterance(clean);
     pickedVoice = pickedVoice || chooseVoice(); if (pickedVoice) { try { u.voice = pickedVoice; } catch (e) { pickedVoice = null; } }
     if (window.I18N && I18N.on()) { pickedVoice = chooseVoice(); try { if (pickedVoice) u.voice = pickedVoice; } catch (e) { pickedVoice = null; } }
-    u.rate = 0.95; u.pitch = 1.1; u.lang = (pickedVoice && pickedVoice.lang) || (window.I18N && I18N.on() ? "ms-MY" : "en-GB");
+    u.rate = (window.MU_VOICE || {}).tts || 0.8; u.pitch = 1.1; u.lang = (pickedVoice && pickedVoice.lang) || (window.I18N && I18N.on() ? "ms-MY" : "en-GB");
     let done = false; const fin = () => { if (!done){ done = true; onEnd(); } };
     u.onend = fin; u.onerror = fin;
-    const safety = setTimeout(fin, 1500 + clean.length * 90);          // some phones never fire "end"
+    const safety = setTimeout(fin, 2000 + clean.length * 130);          // some phones never fire "end"
     speechSynthesis.speak(u);
     return () => { clearTimeout(safety); try { speechSynthesis.cancel(); } catch (e) {} fin(); };
   }
@@ -3938,36 +3900,46 @@ try { stars = +localStorage.getItem("mathup:stars") || 0; sound = localStorage.g
 let kidVoice = null, plainVoice = false, sayTimer = 0;
 function pickVoice(){ return muBestVoice(); }
 try { speechSynthesis.onvoiceschanged = () => { kidVoice = pickVoice(); }; } catch (e) {}
-function speakNow(t){
-  const u = new SpeechSynthesisUtterance(String(t)); u.rate = .92; u.pitch = 1.08; u.volume = 1; u.lang = window.I18N && I18N.on() ? "ms-MY" : "en-US";
+function speakNow(t, end){
+  const u = new SpeechSynthesisUtterance(String(t)); u.rate = (window.MU_VOICE || {}).tts || .8; u.pitch = 1.08; u.volume = 1; u.lang = window.I18N && I18N.on() ? "ms-MY" : "en-US";
+  u.onend = () => { if (end) end(); };
   if (!plainVoice){
     if (!kidVoice) kidVoice = pickVoice();
     if (kidVoice){ try { u.voice = kidVoice; u.lang = kidVoice.lang; } catch (e) { kidVoice = null; } }
-    u.onerror = e => { if (e.error !== "canceled" && e.error !== "interrupted" && !plainVoice){ plainVoice = true; kidVoice = null; speakNow(t); } };
-  }
+    u.onerror = e => { if (e.error !== "canceled" && e.error !== "interrupted" && !plainVoice){ plainVoice = true; kidVoice = null; speakNow(t, end); } else if (end) end(); };
+  } else u.onerror = () => { if (end) end(); };
   speechSynthesis.speak(u);
 }
-function speakTTS(t){
-  if (!("speechSynthesis" in window)) return;
+function speakTTS(t, end){
+  if (!("speechSynthesis" in window)){ if (end) end(); return; }
   try {
     speechSynthesis.cancel(); clearTimeout(sayTimer);
     // A short pause after cancel() stops Chrome on Android from dropping the next sentence.
-    sayTimer = setTimeout(() => { try { speakNow(t); } catch (e) {} }, 90);
-  } catch (e) {}
+    sayTimer = setTimeout(() => { try { speakNow(t, end); } catch (e) { if (end) end(); } }, 90);
+  } catch (e) { if (end) end(); }
 }
 // Recorded kid voices: if voice/<words-joined-by-dashes>.mp3 exists it plays; otherwise the phone's own voice reads it.
-let clip = null;
+let clip = null, curEnd = null;
 const missing = new Set(), slug = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-function stopVoice(){ try { if (clip){ clip.pause(); clip = null; } clearTimeout(sayTimer); speechSynthesis.cancel(); } catch (e) {} }
-function say(t){ try { if (window.UPI_REACT) UPI_REACT(t); } catch (e) {}
-  if (!sound) return;
+function stopVoice(){ try { if (clip){ clip.pause(); clip = null; } clearTimeout(sayTimer); speechSynthesis.cancel(); } catch (e) {} if (curEnd){ const f = curEnd; curEnd = null; f(); } }
+// say() returns a promise that resolves when the voice has finished (or was cut off), so animations can wait for it.
+function say(t){
+  if (!sound){ try { if (window.UPI_REACT) UPI_REACT(t); } catch (e) {} return Promise.resolve(); }
   stopVoice();
-  if (window.I18N && I18N.on()) return speakTTS(I18N.speechText(t));
-  const key = slug(t);
-  if (!key || missing.has(key)) return speakTTS(t);
-  const a = new Audio("voice/" + key + ".mp3"); clip = a;
-  a.onerror = () => { missing.add(key); if (clip === a){ clip = null; speakTTS(t); } };
-  a.play().catch(() => {});
+  try { if (window.UPI_REACT) UPI_REACT(t); } catch (e) {}
+  return new Promise(res => {
+    let fin = false, guard = 0;
+    const end = () => { if (fin) return; fin = true; clearTimeout(guard); if (curEnd === end) curEnd = null; try { if (window.UPI_TALK_END) UPI_TALK_END(); } catch (e) {} res(); };
+    curEnd = end; guard = setTimeout(end, 2500 + String(t).length * 120);     // some phones never say "finished"
+    if (window.I18N && I18N.on()) return speakTTS(I18N.speechText(t), end);
+    const key = slug(t);
+    if (!key || missing.has(key)) return speakTTS(t, end);
+    const a = new Audio("voice/" + key + ".mp3"); clip = a;
+    a.defaultPlaybackRate = a.playbackRate = (window.MU_VOICE || {}).clip || .9;
+    a.onended = end;
+    a.onerror = () => { missing.add(key); if (clip === a){ clip = null; speakTTS(t, end); } };
+    a.play().catch(() => {});
+  });
 }
 function msg(t, kind){ $("msg").textContent = t; $("msg").className = "msg " + (kind || ""); }
 function setPrompt(t){ $("prompt").textContent = t; say(t); setTimeout(cues, 60); }
@@ -3990,7 +3962,7 @@ function mark(el, k){
 }
 async function countItems(sel, id, onEach){
   let k = 0;
-  for (const el of __root.querySelectorAll(sel)){ if (id !== runId) return; k++; mark(el, k); if (onEach) onEach(k); say(k); await wait(750); }
+  for (const el of __root.querySelectorAll(sel)){ if (id !== runId) return; k++; mark(el, k); if (onEach) onEach(k); await Promise.all([say(k), wait(750)]); }
 }
 function cheer(text){
   if (solved) return; solved = true;
@@ -4007,7 +3979,9 @@ function askChoices(c, hint, id){
     if (!b || solved || b.disabled) return;
     if (+b.dataset.v === c){ b.classList.add("right"); cheer(); return; }
     b.classList.add("soft"); b.disabled = true; roundMiss = true;
-    msg("Not yet. Let's look together.", "soft"); say("Not yet. Let's look together.");
+    msg("Not yet. Let's look together.", "soft");
+    await Promise.all([say("Not yet. Let's look together."), wait(600)]);
+    if (id !== runId) return;
     await hint();
     if (id === runId && !solved) msg("Now try again!", "soft");
   };
@@ -4022,8 +3996,8 @@ const LESSONS = [
       $("stage").onclick = ev => {
         const b = ev.target.closest(".it");
         if (!b || b.classList.contains("on") || solved) return;
-        k++; mark(b, k); say(k);
-        if (k === n) setTimeout(() => { if (id === runId) cheer(`There are ${n}! Great counting!`); }, 700);
+        k++; mark(b, k); const spoke = say(k);
+        if (k === n) Promise.all([spoke, wait(500)]).then(() => { if (id === runId) cheer(`There are ${n}! Great counting!`); });
       };
   } },
   { n: "Which number?", e: IC.digits, run(r, id){
@@ -5326,7 +5300,7 @@ function readOut(t){
   const li = [...$("lines").children]; let i = 0;
   const next = () => { li.forEach(x => x.classList.remove("on")); if (i >= 12 || !$("lines")) return; li[i].classList.add("on"); li[i].scrollIntoView({ block: "nearest", behavior: "smooth" });
     const line = `${t} times ${i + 1} is ${t * (i + 1)}`; i++;
-    try { if (window.Upi && "speechSynthesis" in window){ Upi.speak(line, () => setTimeout(next, 250)); return; } } catch (e) {}
+    try { if (window.Upi && "speechSynthesis" in window){ Upi.speak(line, () => setTimeout(next, 500)); return; } } catch (e) {}
     setTimeout(next, 1400); };
   next();
 }
@@ -5477,13 +5451,14 @@ home();
     talk(t, d.pass ? "cheer" : "sad", d.pass ? "cheer" : "idle");
   };
   // every line the lessons speak also shows on Upi, with a matching face
+  window.UPI_TALK_END = () => { clearTimeout(window.__upiTalk); if (bot && bot.el.classList.contains("p-teach") && !bot.el.classList.contains("touring")){ bot.el.classList.remove("talking"); bot.pose("idle"); } };
   window.UPI_REACT = t => {
     if (!bot || bot.el.classList.contains("touring") || route() !== "lessons") return;
     const pose = /not yet|try again|look together|almost/i.test(t) ? "sad" : /got it|great|well done|did it|yes|star|amazing|super|correct/i.test(t) ? "cheer" : "teach";
     if (pose === "cheer") MUS.sfx(/star/i.test(t) ? "star" : "correct"); else if (pose === "sad") MUS.sfx("notyet");
     if (pose === "teach"){                      // instructions are already on the card: just talk along, no bubble
       bot.hush(); bot.pose("teach"); bot.el.classList.add("talking");
-      clearTimeout(window.__upiTalk); window.__upiTalk = setTimeout(() => { if (bot){ bot.el.classList.remove("talking"); bot.pose("idle"); } }, Math.min(4000, 700 + String(t).length * 55));
+      clearTimeout(window.__upiTalk); window.__upiTalk = setTimeout(() => { if (bot){ bot.el.classList.remove("talking"); bot.pose("idle"); } }, Math.min(8000, 900 + String(t).length * 90));
       return;
     }
     bot.say(t, { pose, silent: true, hold: 1400 }).then(() => setTimeout(() => bot && bot.pose("idle"), 1500));
