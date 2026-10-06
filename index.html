@@ -3126,13 +3126,15 @@ const Upi = (() => {
       hush(){ if (stopTalk) stopTalk(); stopTalk = null; el.classList.remove("talking"); if (bubble){ bubble.remove(); bubble = null; } return bot; },
       // say(): show a speech bubble, move the mouth, and read it aloud (voice or an mp3 file)
       say(text, o){
-        o = o || {}; bot.hush();
+        o = o || {};
+        if (el.classList.contains("touring") && !o.actions) return Promise.resolve();   // a tour owns the bubble
+        bot.hush();
         if (window.I18N) text = I18N.tr(text);
         if (o.pose) bot.pose(o.pose);
         bubble = document.createElement("div"); bubble.className = "upi-bubble"; bubble.setAttribute("role", "status");
         bubble.innerHTML = `<span class="who"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="2" y="4" width="20" height="17" rx="7" fill="#1F5EFF" stroke="#14284B" stroke-width="1.6"/><rect x="5" y="7" width="14" height="11" rx="5" fill="#EAF1FF"/><circle cx="9.5" cy="12" r="1.6" fill="#14284B"/><circle cx="14.5" cy="12" r="1.6" fill="#14284B"/><path d="M10 15.2q2 1.6 4 0" stroke="#14284B" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M12 4V1.5" stroke="#14284B" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="1.5" r="1.4" fill="#FFC233"/></svg>${NAME}</span><span class="txt"></span>` + (o.actions ? `<div class="acts">${o.actions}</div>` : "");
         if (!voiceOn) bubble.classList.add("read");
-        bubble.addEventListener("click", e => { if (!e.target.closest("button")) bot.hush(); });
+        bubble.addEventListener("click", e => { if (!e.target.closest("button") && !o.actions) bot.hush(); });
         document.body.appendChild(bubble);
         if (!voiceOn && window.MUS && !o.silent) MUS.sfx("pop");
         const txt = bubble.querySelector(".txt");
@@ -3190,6 +3192,7 @@ const Upi = (() => {
     let open = null;
     const close = () => { if (open){ open.remove(); open = null; } };
     const toggle = () => {
+      if (dockBot.el.classList.contains("touring")) return;
       if (open) return close();
       open = document.createElement("div"); open.className = "upi-menu";
       const items = (menu || []).concat([{ icon: voiceOn ? "mute" : "voice", color: "#7048E8", label: voiceOn ? "Voice off" : "Voice on", run: () => setVoice(!voiceOn) }]);
@@ -3200,7 +3203,8 @@ const Upi = (() => {
       // anchor the drawer to the robot: below it when the robot is up top, above it when the robot is down low
       { const r = dockBot.el.getBoundingClientRect(), h = open.offsetHeight, vh = innerHeight, m = 10;
         open.style.right = Math.max(m, innerWidth - r.right) + "px"; open.style.bottom = "auto";
-        open.style.top = Math.max(m, Math.min(vh - h - m, r.top + r.height / 2 < vh / 2 ? r.bottom + 8 : r.top - h - 8)) + "px"; }
+        open.style.top = Math.max(m, Math.min(vh - h - m, r.top + r.height / 2 < vh / 2 ? r.bottom + 8 : r.top - h - 8)) + "px";
+        const mr = open.getBoundingClientRect(); if (mr.left < m) open.style.right = Math.max(m, innerWidth - r.right - (m - mr.left)) + "px"; }
       dockBot.pose("wave"); setTimeout(() => dockBot.pose("idle"), 1400);
     };
     dockBot.el.onclick = toggle; dockBot.el.onkeydown = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); } };
@@ -3211,18 +3215,30 @@ const Upi = (() => {
 
   // ---------- step-by-step page tours ----------
   // steps: [{ el: "#css-selector" (optional), text: "...", pose: "point-r" (optional) }]
+  let activeTour = null;
   function tour(key, steps, o){
     o = o || {};
+    if (activeTour){ if (activeTour.key === key) return activeTour.promise; activeTour.cancel(); }
     const bot = dock(o.menu); bot.hush(); bot.el.classList.add("touring");
     const shade = document.createElement("div"); shade.className = "upi-shade";
     const hole = document.createElement("div"); hole.className = "upi-hole";
     document.body.append(shade, hole);
-    let i = 0, follow = null; const home = { right: bot.el.style.right, bottom: bot.el.style.bottom };
+    let i = 0, follow = null, pending = true, lastArgs = null, watch = 0, ended = false; const home = { right: bot.el.style.right, bottom: bot.el.style.bottom };
     let raf = 0; const onMove = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => follow && follow()); };
     window.addEventListener("scroll", onMove, { passive: true }); window.addEventListener("resize", onMove);
-    return new Promise(resolve => {
-      const finish = () => {
+    const promise = new Promise(resolve => {
+      const end = done => {
+        if (ended) return; ended = true; clearInterval(watch); activeTour = null;
         window.removeEventListener("scroll", onMove); window.removeEventListener("resize", onMove); follow = null;
+        shade.remove(); hole.remove(); bot.hush(); bot.el.classList.remove("touring");
+        Object.assign(bot.el.style, { left: "", top: "", right: home.right, bottom: home.bottom });
+        if (done){ try { localStorage.setItem(KEY_TOUR + key, "done"); } catch (e) {} bot.pose("cheer"); setTimeout(() => bot.pose("idle"), 1600); }
+        else bot.pose("idle");
+        resolve();
+      };
+      activeTour = { key, promise: null, cancel: () => end(false), refresh: () => { if (follow) setTimeout(() => follow && follow(), 60); } };
+      const finish = () => {
+        window.removeEventListener("scroll", onMove); window.removeEventListener("resize", onMove); follow = null; ended = true; clearInterval(watch); activeTour = null;
         shade.remove(); hole.remove(); bot.hush(); bot.el.classList.remove("touring");
         Object.assign(bot.el.style, { left: "", top: "", right: home.right, bottom: home.bottom });
         try { localStorage.setItem(KEY_TOUR + key, "done"); } catch (e) {}
@@ -3230,13 +3246,15 @@ const Upi = (() => {
       };
       shade.onclick = e => e.stopPropagation();
       const show = () => {
+        pending = true;
         const s = steps[i], t = s.el ? document.querySelector(s.el) : null;
         const size = bot.el.offsetWidth || 92, bh = size * 190 / 160;
         hole.classList.toggle("blank", !t);
         if (t){
           t.scrollIntoView({ block: "center", behavior: "instant" });
           const layout = () => {
-            const r = t.getBoundingClientRect(), pad = 8;
+            const tt = (s.el && document.querySelector(s.el)) || t;
+            const r = tt.getBoundingClientRect(), pad = 8;
             Object.assign(hole.style, { left: r.left - pad + "px", top: r.top - pad + "px", width: r.width + pad * 2 + "px", height: r.height + pad * 2 + "px" });
             let x, y, pose, side;
             const roomL = r.left - 10, roomR = innerWidth - r.right - 10;
@@ -3271,6 +3289,7 @@ const Upi = (() => {
         }
       };
       const talk = (pose, side) => {
+        pending = false; lastArgs = [pose, side];
         const last = i === steps.length - 1;
         bot.say(steps[i].text, { pose, side, actions: `<span class="step">${i + 1} of ${steps.length}</span>${i ? '<button type="button" data-t="back">Back</button>' : '<button type="button" data-t="skip">Skip</button>'}<button type="button" class="go" data-t="next">${last ? "Let's go!" : "Next"}</button>` });
         const b = bot.bubble(); b.style.zIndex = 1003;
@@ -3282,13 +3301,15 @@ const Upi = (() => {
           i++; show();
         };
       };
+      watch = setInterval(() => { const bb = bot.bubble(); if (!ended && !pending && lastArgs && (!bb || !bb.isConnected)) talk(lastArgs[0], lastArgs[1]); }, 700);   // self-heal: bring the bubble back if anything removed it
       show();
     });
+    activeTour.promise = promise; return promise;
   }
   const seen = key => { try { return localStorage.getItem(KEY_TOUR + key) === "done"; } catch (e) { return false; } };
   const tourOnce = (key, steps, o) => seen(key) ? Promise.resolve() : tour(key, steps, o);
 
-  return { create, dock, tour, tourOnce, seen, setVoice, voice: () => voiceOn, speak, POSES, NAME };
+  return { create, dock, tour, tourOnce, seen, setVoice, voice: () => voiceOn, speak, POSES, NAME, tourKey: () => activeTour && activeTour.key, tourCancel: () => activeTour && activeTour.cancel(), tourRefresh: () => activeTour && activeTour.refresh() };
 })();
 
 // Math Up sound: music and sound effects made in code (no audio files, works offline, 100% original).
@@ -5311,10 +5332,10 @@ home();
     wasDone = done;
   }, 400);
   // Upi teaches the short "Learn it" lessons
-  window.UPI_LEARN = (t, pose) => { if (!bot) return; bot.el.classList.remove("away"); bot.el.classList.add("coach"); bot.hush(); bot.pose(pose || "teach"); bot.el.classList.add("talking"); Upi.speak(t, () => { if (bot){ bot.el.classList.remove("talking"); bot.pose(pose === "cheer" ? "cheer" : "idle"); } }); };
+  window.UPI_LEARN = (t, pose) => { if (!bot || bot.el.classList.contains("touring")) return; bot.el.classList.remove("away"); bot.el.classList.add("coach"); bot.hush(); bot.pose(pose || "teach"); bot.el.classList.add("talking"); Upi.speak(t, () => { if (bot){ bot.el.classList.remove("talking"); bot.pose(pose === "cheer" ? "cheer" : "idle"); } }); };
   // Upi is the teacher who marks each worksheet
   window.UPI_MARK = (phase, d) => {
-    if (!bot) return;
+    if (!bot || bot.el.classList.contains("touring")) return;
     bot.el.classList.remove("away"); bot.el.classList.add("coach");
     // the sheet header already shows his words, so Upi just talks (mouth + voice), no bubble over the marks
     const talk = (t, pose, after) => { bot.hush(); bot.pose(pose); bot.el.classList.add("talking"); Upi.speak(t, () => { if (bot){ bot.el.classList.remove("talking"); if (after) bot.pose(after); } }); };
@@ -5324,7 +5345,7 @@ home();
   };
   // every line the lessons speak also shows on Upi, with a matching face
   window.UPI_REACT = t => {
-    if (!bot || route() !== "lessons") return;
+    if (!bot || bot.el.classList.contains("touring") || route() !== "lessons") return;
     const pose = /not yet|try again|look together|almost/i.test(t) ? "sad" : /got it|great|well done|did it|yes|star|amazing|super|correct/i.test(t) ? "cheer" : "teach";
     if (pose === "cheer") MUS.sfx(/star/i.test(t) ? "star" : "correct"); else if (pose === "sad") MUS.sfx("notyet");
     if (pose === "teach"){                      // instructions are already on the card: just talk along, no bubble
@@ -5336,7 +5357,9 @@ home();
   };
   window.UPI_TOUR = name => { if (!Upi.seen(name)){ const st = steps(name); if (st.length) Upi.tourOnce(name, st, { menu }); } };
   window.UPI_AFTER = name => {
-    const b = ensure(); b.hush(); b.pose("idle");
+    const b = ensure();
+    if (Upi.tourKey()){ if (Upi.tourKey() === name){ Upi.tourRefresh(); return; } Upi.tourCancel(); }
+    b.hush(); b.pose("idle");
     if (!STEPS[name] || name === "admin") return;       // the admin tour starts once the dashboard is open
     // first visit of each screen: a short guided tour (once)
     setTimeout(() => { if (route() === name && !Upi.seen(name)){ const st = steps(name); if (st.length) Upi.tourOnce(name, st, { menu }); } }, name === "dashboard" ? 1600 : 900);
