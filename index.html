@@ -9,6 +9,7 @@
 <meta name="color-scheme" content="light">
 <title>Math Up</title>
 <link rel="manifest" href="manifest.webmanifest">
+<script>window.__muInstall=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__muInstall=e;document.dispatchEvent(new Event("mu-install-ready"))});</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,6 +62,20 @@ input,select,textarea{font-size:max(16px,1em)}
 .pg[data-p="login"] .btn{width:100%;height:60px;border:0;border-radius:16px;background:var(--accent);color:#fff;font:inherit;font-size:19px;font-weight:600;cursor:pointer}
 .pg[data-p="login"] .btn[disabled]{opacity:.65;cursor:default}
 .pg[data-p="login"] .status{min-height:22px;margin:12px 0 0;font-size:15px;color:var(--err);text-align:center}
+.pg[data-p="login"] .getapp{margin:14px 0 96px;background:#fff;border:2.5px solid var(--ink);border-radius:18px;padding:14px 14px 16px;text-align:center}
+.pg[data-p="login"] .getapp[hidden],.pg[data-p="login"] .getapp [hidden]{display:none}
+.pg[data-p="login"] .ga-t{margin:0;font-weight:700;font-size:18px;color:var(--ink)}
+.pg[data-p="login"] .ga-s{margin:2px 0 12px;font-size:14.5px;color:var(--muted)}
+.pg[data-p="login"] .ga-install{width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--accent);color:#fff;border:2.5px solid var(--ink);border-radius:14px;font:inherit;font-size:18px;font-weight:700;cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.pg[data-p="login"] .ga-install:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.pg[data-p="login"] .ga-install:focus-visible{outline:3px solid #FFC233;outline-offset:3px}
+.pg[data-p="login"] .ga-help{margin-top:18px;text-align:left}
+.pg[data-p="login"] .ga-note{margin:0 0 10px;padding:8px 12px;background:#FFF3D6;border:2px solid var(--ink);border-radius:12px;font-size:14.5px;color:var(--ink)}
+.pg[data-p="login"] .ga-help ol{list-style:none;margin:0;padding:0}
+.pg[data-p="login"] .ga-help li{display:flex;align-items:center;gap:10px;background:#EAF1FF;border:2px solid var(--ink);border-radius:12px;padding:9px 12px;margin:0 0 8px;font-size:15.5px;color:var(--ink)}
+.pg[data-p="login"] .ga-help li:last-child{margin-bottom:0}
+.pg[data-p="login"] .ga-help .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center}
+.pg[data-p="login"] .ga-done{margin:0;padding:10px 12px;background:#E6F6EC;border:2px solid var(--ink);border-radius:12px;font-size:15.5px;font-weight:600;color:var(--ink)}
 .pg[data-p="login"] .alt{margin:18px 0 0;text-align:center;color:var(--muted);font-size:15px;background:#fff;border-radius:12px;padding:6px 10px}
 .pg[data-p="login"] [hidden]{display:none!important}
 .pg[data-p="login"] .langrow{display:flex;justify-content:center;margin:0 0 14px}
@@ -1222,6 +1237,26 @@ input,select,textarea{font-size:max(16px,1em)}
     </div>
 
     <p class="alt">Parents: <a href="#/signup">create an account</a> to add your child.</p>
+
+    <section class="getapp" id="getapp" aria-label="Install Math Up" hidden>
+      <p class="ga-t">Install Math Up</p>
+      <p class="ga-s">Add it to your phone. It opens like an app and works without internet.</p>
+      <button type="button" class="ga-install" id="gaInstall"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v11m0 0l-4-4m4 4l4-4M5 18v1.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Install app</span></button>
+      <div class="ga-help" id="gaHelp" hidden>
+        <p class="ga-note" id="gaSafari" hidden>Open this page in Safari first.</p>
+        <ol data-for="ios" hidden>
+          <li><b class="n">1</b><span>Tap the Share button</span></li>
+          <li><b class="n">2</b><span>Choose Add to Home Screen</span></li>
+          <li><b class="n">3</b><span>Tap Add</span></li>
+        </ol>
+        <ol data-for="android" hidden>
+          <li><b class="n">1</b><span>Tap the menu (three dots)</span></li>
+          <li><b class="n">2</b><span>Choose Install app or Add to Home screen</span></li>
+          <li><b class="n">3</b><span>Tap Install</span></li>
+        </ol>
+      </div>
+      <p class="ga-done" id="gaDone" role="status" hidden>Math Up is installed. Find it on your home screen.</p>
+    </section>
   </main>
 </div></template>
 <template id="tpl-signup"><div class="page"><main>
@@ -1762,7 +1797,7 @@ const EXACT = {
   "Me": "Saya", "Background colour": "Warna latar", "More backgrounds are in the Store.": "Lagi banyak latar ada di Kedai.", "Backgrounds": "Latar", "Using": "Dipakai",
   "Earn stars from worksheets, lessons and Boss Battles, then unlock special backgrounds.": "Kumpul bintang dari kertas latihan, pelajaran dan Lawan Bos, kemudian buka latar istimewa.",
   "I'm a student": "Saya murid", "I'm a parent": "Saya ibu bapa", "Student ID": "ID murid", "PIN (4 numbers)": "PIN (4 nombor)", "Show PIN": "Tunjuk PIN", "Show": "Tunjuk", "Log in": "Log masuk",
-  "Forgot your PIN? Ask a parent to reset it.": "Lupa PIN? Minta ibu bapa set semula.", "Log in to start today's worksheet.": "Log masuk untuk mula kertas latihan hari ini.", "Password": "Kata laluan", "Forgot password?": "Lupa kata laluan?",
+  "Forgot your PIN? Ask a parent to reset it.": "Lupa PIN? Minta ibu bapa set semula.", "Log in to start today's worksheet.": "Log masuk untuk mula kertas latihan hari ini.", "Password": "Kata laluan", "Install Math Up": "Pasang Math Up", "Add it to your phone. It opens like an app and works without internet.": "Tambah ke telefon anda. Ia dibuka seperti aplikasi dan berfungsi tanpa internet.", "Install app": "Pasang aplikasi", "Open this page in Safari first.": "Buka halaman ini dalam Safari dahulu.", "Tap the Share button": "Ketik butang Kongsi", "Choose Add to Home Screen": "Pilih Tambah ke Skrin Utama", "Tap Add": "Ketik Tambah", "Tap the menu (three dots)": "Ketik menu (tiga titik)", "Choose Install app or Add to Home screen": "Pilih Pasang aplikasi atau Tambah ke skrin utama", "Tap Install": "Ketik Pasang", "Math Up is installed. Find it on your home screen.": "Math Up telah dipasang. Cari di skrin utama anda.",  "Forgot password?": "Lupa kata laluan?",
   "Parents:": "Ibu bapa:", "create an account": "buat akaun", "to add your child.": "untuk tambah anak anda.", "Type your student ID.": "Taip ID murid kamu.", "Your PIN is 4 numbers.": "PIN kamu 4 nombor.",
   "Couldn't log in. Try again.": "Tak dapat log masuk. Cuba lagi.", "Couldn't reach the server. Check your connection and try again.": "Tak dapat sambung ke pelayan. Semak internet dan cuba lagi.",
   "Waking up the server. The first try can take up to 20 seconds.": "Sedang sambung ke pelayan. Kali pertama boleh ambil masa sampai 20 saat.", "You're offline. Connect to the internet and try again.": "Kamu di luar talian. Sambung internet dan cuba lagi.",
@@ -3469,6 +3504,29 @@ const __byId = id => __root.querySelector("#" + CSS.escape(id));
 
 const $ = id => __byId(id);
 let mode = "student";
+{ const g = __root.querySelector("#getapp");
+  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1), and = /Android/i.test(ua);
+  const inApp = !!window.MATHUP_NATIVE || /MathUpApp/i.test(ua) || (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+  if (g && !inApp){
+    const btn = g.querySelector("#gaInstall"), help = g.querySelector("#gaHelp"), done = g.querySelector("#gaDone");
+    const steps = which => help.querySelectorAll("[data-for]").forEach(el => { el.hidden = el.dataset.for !== which; });
+    const toggle = which => { steps(which); help.hidden = !help.hidden; };
+    if (ios){
+      g.hidden = false;
+      if (/FBAN|FBAV|Instagram|Line\/|MicroMessenger|TikTok|Snapchat/i.test(ua)) g.querySelector("#gaSafari").hidden = false;   // in-app browsers cannot add to the home screen
+      btn.addEventListener("click", () => toggle("ios"));
+    } else {
+      btn.addEventListener("click", async () => {
+        const ev = window.__muInstall;
+        if (!ev) return toggle("android");                    // no one-tap prompt on this browser: show the 3 steps instead
+        window.__muInstall = null; ev.prompt();
+        try { await ev.userChoice; } catch (e) {}
+      });
+      if (and || window.__muInstall) g.hidden = false;        // phones always; desktop only when the browser offers one-tap install
+      document.addEventListener("mu-install-ready", () => { g.hidden = false; });
+    }
+    window.addEventListener("appinstalled", () => { g.hidden = false; btn.hidden = true; help.hidden = true; done.hidden = false; });
+  } }
 
 // Connect your server here (for example your Google Script). Return { ok: true } to let the person in.
 // mode is "student" (id = student ID, secret = 4-digit PIN) or "parent" (id = email, secret = password).
