@@ -3159,8 +3159,9 @@ const Upi = (() => {
     const r0 = el.getBoundingClientRect(), vw0 = innerWidth;
     if (side === "right") b.style.maxWidth = Math.max(160, vw0 - r0.right - 16) + "px";
     else if (side === "below" || side === "above") b.style.maxWidth = Math.min(320, vw0 - 24) + "px";
-    const r = el.getBoundingClientRect(), bw = Math.ceil(b.offsetWidth) + 1, bh = b.offsetHeight, vw = innerWidth, vh = innerHeight, m = 10;
+    const r = el.getBoundingClientRect(), bw = Math.ceil(b.offsetWidth) + 1, vw = innerWidth, vh = innerHeight, m = 10;
     b.style.width = bw + "px";          // keep its natural size wherever it ends up
+    const bh = b.offsetHeight;          // measured after the width is fixed, so wrapped buttons are counted
     let x, y;
     if (side === "below" || side === "above"){
       x = Math.max(m, Math.min(vw - bw - m, r.left + r.width / 2 - bw / 2));
@@ -3246,8 +3247,13 @@ const Upi = (() => {
               pose = onLeft ? "point-r" : "point-l"; side = "below";
             } else {                                               // wide target: stand on the left, below it (or above), bubble beside
               x = 10;
-              const below = r.bottom + 12 + bh < innerHeight;
-              y = below ? r.bottom + 12 : Math.max(8, r.top - bh - 12);
+              const bub = bot.bubble(); let bbH = 0;          // height of the finished bubble beside the robot (the text types in, so measure a full-text copy)
+              if (bub){ const c = bub.cloneNode(true), tx = c.querySelector(".txt"); if (tx){ tx.textContent = String(steps[i].text); tx.style.visibility = ""; }
+                Object.assign(c.style, { position: "fixed", left: "-9999px", top: "0", visibility: "hidden", width: "", maxWidth: Math.max(160, innerWidth - (10 + size) - 16) + "px" });
+                document.body.appendChild(c); bbH = c.offsetHeight; c.remove(); }
+              const need = Math.max(bh, bh * 0.15 + bbH);
+              const below = r.bottom + 12 + need < innerHeight - 8;
+              y = below ? r.bottom + 12 : Math.max(8, r.top - need - 12);
               pose = below ? "point-up" : "teach"; side = "right";
             }
             Object.assign(bot.el.style, { right: "auto", bottom: "auto", left: x + "px", top: y + "px" });
