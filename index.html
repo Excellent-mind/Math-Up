@@ -1109,11 +1109,11 @@ input,select,textarea{font-size:max(16px,1em)}
 #mu-pow b i{font-style:normal;background:linear-gradient(90deg,#2FB5FF,#3D6BFF 55%,#9B4DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
 #mu-pow[hidden]{display:none}
 @media print{#mu-pow,#mu-splash{display:none!important}}
-#mu-splash{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;background:#1F5EFF;transition:opacity .35s ease}
+#mu-splash{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;background:#0A9DFD;transition:opacity .35s ease;flex-direction:column;text-align:center;padding:24px}
 #mu-splash.on{display:flex}
 #mu-splash.out{opacity:0;pointer-events:none}
-#mu-splash .sp-mark{width:120px;height:120px;filter:drop-shadow(0 6px 0 rgba(8,36,140,.45));animation:duoDrop .9s var(--d-spring,cubic-bezier(.34,1.56,.64,1)) both}
-#mu-splash .sp-mark svg{display:block;width:100%;height:100%}
+#mu-splash .sp-big{font:700 clamp(44px,15vw,72px)/1.05 "Fredoka",system-ui,sans-serif;color:#fff;letter-spacing:.01em;text-shadow:0 5px 0 rgba(6,60,140,.35);animation:spPop .7s cubic-bezier(.34,1.56,.64,1) both}
+#mu-splash .sp-small{margin-top:10px;font:600 clamp(20px,6.5vw,30px)/1.2 "Fredoka",system-ui,sans-serif;color:#fff;opacity:.95;animation:spUp .6s .25s ease both}
 @keyframes spPop{from{transform:scale(.4) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
 @keyframes spUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){#mu-splash *{animation:none!important}}
@@ -1192,7 +1192,7 @@ input,select,textarea{font-size:max(16px,1em)}
 <div id="app"></div>
 <footer id="mu-pow" data-noi18n><span>Powered by</span><span class="em"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 104" aria-hidden="true"><defs><linearGradient id="emFG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FB5FF"/><stop offset=".55" stop-color="#3D6BFF"/><stop offset="1" stop-color="#9B4DFF"/></linearGradient></defs><path d="M47 6l4 9M60 2v10M73 6l-4 9" stroke="url(#emFG)" stroke-width="5" stroke-linecap="round" transform="translate(16 0)"/><path d="M54 28L22 43a6 6 0 0 0-3.5 5.5v19a6 6 0 0 0 3.5 5.5L54 88" fill="none" stroke="#14284B" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/><path d="M30 56L56 44" stroke="#14284B" stroke-width="11" stroke-linecap="round"/><path d="M30 72l24 10" stroke="#14284B" stroke-width="3" stroke-linecap="round" opacity=".7"/><path d="M52 33l12-6 16 23 22-27a4 4 0 0 1 7 2.6V86l-12 8V45L80 66 62 45v43l-10 5z" fill="url(#emFG)"/><rect x="66" y="74" width="28" height="7" rx="3.5" fill="#14284B"/><rect x="69" y="84" width="22" height="7" rx="3.5" fill="#14284B"/><path d="M73 94h14a7 7 0 0 1-14 0z" fill="#14284B"/></svg></span><b>Excellent <i>Mindblow</i></b></footer>
 <div id="mu-splash" data-noi18n aria-hidden="true">
-  <span class="sp-mark"><svg viewBox="4 0 42 44" aria-hidden="true"><rect x="9.5" y="27" width="7.5" height="11.5" rx="2.2" fill="#fff"/><rect x="20.25" y="20.5" width="7.5" height="18" rx="2.2" fill="#fff"/><rect x="31" y="14" width="7.5" height="24.5" rx="2.2" fill="#fff"/><path d="M34.75 3.5l1.9 4.1 4.5.5-3.35 3 .95 4.4-4-2.3-4 2.3.95-4.4-3.35-3 4.5-.5z" fill="#FFD43B" stroke="#14284B" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+  <div class="sp-big">Math Up</div><div class="sp-small">Home Tutor App</div>
 </div>
 <script>
 // voice speed (lower = slower). tts = the phone's own voice, clip = the recorded voice/*.mp3 files
@@ -1203,7 +1203,7 @@ window.MU_VOICE = { tts: 0.8, clip: 0.9 };
   var seen = false; try { seen = sessionStorage.getItem("mathup:splash") === "1"; sessionStorage.setItem("mathup:splash", "1"); } catch (e) {}
   if (seen) { sp.remove(); return; }
   var meta = document.querySelector('meta[name="theme-color"]'), old = meta && meta.content;
-  if (meta) meta.content = "#1F5EFF";                       // phone status bar matches the splash
+  if (meta) meta.content = "#0A9DFD";                       // phone status bar matches the splash
   sp.classList.add("on");
   var t0 = Date.now(), closed = false;
   var close = function(){ if (closed) return; closed = true; if (meta) meta.content = old; sp.classList.add("out"); setTimeout(function(){ sp.remove(); }, 400); };
@@ -2235,7 +2235,7 @@ const MU_API = "https://script.google.com/macros/s/AKfycbw1WmAvFdkZUl_fAZ73x8uQW
     sessionStorage.setItem(K, String(Date.now()));
     fetch(MU_API, { mode: "no-cors", cache: "no-store" }).catch(() => {});
   } catch (e) {} };
-  setTimeout(ping, 800);
+  ping(); addEventListener("pageshow", ping);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) ping(); });
 })();
 
