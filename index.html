@@ -1108,7 +1108,7 @@ input,select,textarea{font-size:max(16px,1em)}
 #mu-pow b{font-weight:700;color:#14284B;letter-spacing:.02em}
 #mu-pow b i{font-style:normal;background:linear-gradient(90deg,#2FB5FF,#3D6BFF 55%,#9B4DFF);-webkit-background-clip:text;background-clip:text;color:transparent}
 #mu-pow[hidden]{display:none}
-@media print{#mu-pow,#mu-splash{display:none!important}}
+@media print{#mu-pow,#mu-splash,#mu-splash2{display:none!important}}
 #mu-splash{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;background:#0A9DFD;transition:opacity .35s ease;flex-direction:column;text-align:center;padding:24px}
 #mu-splash.on{display:flex}
 #mu-splash.out{opacity:0;pointer-events:none}
@@ -1116,9 +1116,14 @@ input,select,textarea{font-size:max(16px,1em)}
 #mu-splash .sp-face svg{width:100%;height:auto;display:block;overflow:visible}
 #mu-splash .sp-big{font:700 clamp(44px,15vw,72px)/1.05 "Fredoka",system-ui,sans-serif;color:#fff;letter-spacing:.01em;text-shadow:0 5px 0 rgba(6,60,140,.35);animation:spPop .7s cubic-bezier(.34,1.56,.64,1) both}
 #mu-splash .sp-small{margin-top:10px;font:600 clamp(20px,6.5vw,30px)/1.2 "Fredoka",system-ui,sans-serif;color:#fff;opacity:.95;animation:spUp .6s .25s ease both}
+/* second launch screen: just the word "Math Up" on Duolingo green, soft white text */
+#mu-splash2{position:fixed;inset:0;z-index:4999;display:none;align-items:center;justify-content:center;background:#58CC02;transition:opacity .4s ease;padding:24px;text-align:center}
+#mu-splash2.on{display:flex}
+#mu-splash2.out{opacity:0;pointer-events:none}
+#mu-splash2 .sp2-word{font:700 clamp(52px,17vw,92px)/1 "Fredoka",system-ui,sans-serif;letter-spacing:-.01em;color:rgba(255,255,255,.66);white-space:nowrap;user-select:none;-webkit-user-select:none}
 @keyframes spPop{from{transform:scale(.4) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
 @keyframes spUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){#mu-splash *{animation:none!important}}
+@media (prefers-reduced-motion:reduce){#mu-splash *,#mu-splash2 *{animation:none!important}}
 /* worksheet footer credit */
 .pg[data-p="print"] .pf{gap:10px}
 .pg[data-p="print"] .pf > span{white-space:nowrap}
@@ -1160,7 +1165,7 @@ input,select,textarea{font-size:max(16px,1em)}
 .pg.duo-in .lv{animation:duoPop .45s var(--d-spring) backwards}
 .pg.duo-in .lv:nth-child(2){animation-delay:.05s}.pg.duo-in .lv:nth-child(3){animation-delay:.1s}.pg.duo-in .lv:nth-child(4){animation-delay:.15s}.pg.duo-in .lv:nth-child(n+5){animation-delay:.2s}
 /* loader: top bar + bouncing dots when the server is slow */
-#duo-load{position:fixed;left:0;right:0;top:0;height:5px;z-index:6000;pointer-events:none;opacity:0;transition:opacity .2s;background:linear-gradient(90deg,transparent,var(--d-blue),var(--d-green),transparent) 0/40% 100% no-repeat;animation:duoSweep 1s linear infinite}
+#duo-load{position:fixed;left:0;right:0;top:0;height:6px;z-index:6000;pointer-events:none;opacity:0;transition:opacity .2s;background:linear-gradient(90deg,transparent,var(--d-blue) 16%,var(--d-green) 50%,var(--d-gold) 84%,transparent) -100% 0/75% 100% no-repeat;animation:duoSweep 1.15s linear infinite}
 #duo-load.on{opacity:1}
 #duo-dots{position:fixed;left:50%;top:40%;z-index:6000;display:none;gap:8px;transform:translateX(-50%);padding:14px 18px;border-radius:18px;background:#fff;border:2px solid var(--d-line);box-shadow:0 4px 0 var(--d-line)}
 #duo-dots.on{display:flex;animation:duoPop .3s var(--d-spring)}
@@ -1174,6 +1179,34 @@ input,select,textarea{font-size:max(16px,1em)}
 .upi-dock.duo-hide{opacity:0!important;pointer-events:none!important;transform:translateY(40px) scale(.7)!important}
 .upi-dock.duo-peek{transform:translateX(48%) rotate(-8deg)!important}
 .upi-dock.duo-pop{animation:duoUp .7s var(--d-spring)}
+
+/* ===== button colours: every button type gets its own clear colour ===== */
+.pg[data-p] .btn:not(:disabled).blue{background:var(--d-blue)!important;color:#fff!important;box-shadow:0 5px 0 var(--d-blue-d)!important}
+.pg[data-p] .btn:not(:disabled).blue:active{box-shadow:0 0 0 var(--d-blue-d)!important}
+.pg[data-p] .btn:not(:disabled).gold{background:var(--d-gold)!important;color:#5B3D00!important;box-shadow:0 5px 0 var(--d-gold-d)!important}
+.pg[data-p] .btn:not(:disabled).gold:active{box-shadow:0 0 0 var(--d-gold-d)!important}
+.pg[data-p] .btn:not(:disabled).orange{background:#FF9600!important;color:#fff!important;box-shadow:0 5px 0 #E27F00!important}
+.pg[data-p] .btn:not(:disabled).orange:active{box-shadow:0 0 0 #E27F00!important}
+.pg[data-p] .btn:not(:disabled).alt{background:#E4F6FF!important;color:#1899D6!important;border:2px solid #8ED8FB!important;box-shadow:0 4px 0 #8ED8FB!important}
+.pg[data-p] .btn:not(:disabled).alt:active{box-shadow:0 0 0 #8ED8FB!important}
+.pg[data-p] .sm:not(:disabled){background:var(--d-blue)!important;color:#fff!important;border:0!important;border-radius:14px!important;font-weight:700;box-shadow:0 4px 0 var(--d-blue-d)!important}
+.pg[data-p] .sm:not(:disabled):active{box-shadow:0 0 0 var(--d-blue-d)!important}
+.pg[data-p] .sm.del:not(:disabled){background:var(--d-red)!important;box-shadow:0 4px 0 var(--d-red-d)!important}
+.pg[data-p] .sm.del:not(:disabled):active{box-shadow:0 0 0 var(--d-red-d)!important}
+.pg[data-p] .pad .go{background:var(--d-green)!important;color:#fff!important;border:0!important;box-shadow:0 4px 0 var(--d-green-d)!important}
+.pg[data-p] .pad .go:active{box-shadow:0 0 0 var(--d-green-d)!important}
+/* top-right chips: sound = blue, stars = gold, log out = soft red */
+.pg[data-p] .pill{border:2px solid #8ED8FB!important;background:#E4F6FF;color:#1899D6;font-weight:700;box-shadow:0 4px 0 #8ED8FB!important}
+.pg[data-p] .pill:active{box-shadow:0 0 0 #8ED8FB!important}
+.pg[data-p] #stars.pill{border-color:#FFD84D!important;background:#FFF6CC;color:#B77A00;box-shadow:0 4px 0 #FFD84D!important}
+.pg[data-p] #out.pill{border-color:#FFA8A8!important;background:#FFECEC;color:#E02B2B;box-shadow:0 4px 0 #FFA8A8!important}
+.pg[data-p] #out.pill:active{box-shadow:0 0 0 #FFA8A8!important}
+.pg[data-p="practice"] .top .pill{height:38px;padding:0 14px;display:inline-flex;align-items:center;font-size:15px;border-radius:20px}
+.pg[data-p="practice"] .top>span:last-child{display:flex;align-items:center;gap:10px}
+/* number keys */
+.pg[data-p="practice"] .pad button:not(.go){border:2px solid var(--d-line);background:#fff;color:var(--d-ink);box-shadow:0 4px 0 var(--d-line);font-weight:700}
+.pg[data-p="practice"] .pad button:not(.go):active{transform:translateY(4px);box-shadow:0 0 0 var(--d-line);background:#fff}
+.pg[data-p="practice"] .pad button.x{background:#FFECEC;color:var(--d-red-d);border-color:#FFC1C1;box-shadow:0 4px 0 #FFC1C1}
 @keyframes duoShine{0%{left:-50%}55%,100%{left:130%}}
 @keyframes duoFlash{50%{box-shadow:0 0 0 6px rgba(255,200,0,.5)}}
 @keyframes duoBadge{0%{transform:scale(1)}30%{transform:scale(1.7) rotate(-10deg)}60%{transform:scale(.9) rotate(6deg)}100%{transform:scale(1)}}
@@ -1182,12 +1215,12 @@ input,select,textarea{font-size:max(16px,1em)}
 @keyframes duoSlide{from{opacity:0;transform:translateY(14px)}}
 @keyframes duoDrop{0%{transform:translateY(-140px) scale(.8,1.2);opacity:0}55%{transform:translateY(0) scale(1.15,.85);opacity:1}75%{transform:scale(.94,1.06)}100%{transform:none}}
 @keyframes duoBoot{to{background-size:100% 100%}}
-@keyframes duoSweep{from{background-position:-60% 0}to{background-position:160% 0}}
+@keyframes duoSweep{from{background-position:-100% 0}to{background-position:200% 0}}
 @keyframes duoBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}}
 @keyframes duoRise{0%{transform:translateY(10px) scale(.6);opacity:0}20%{transform:scale(1.15);opacity:1}100%{transform:translateY(-70px);opacity:0}}
 @keyframes duoConf{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
 @keyframes duoUp{0%{transform:translateY(90px) scale(.6)}100%{transform:none}}
-@media (prefers-reduced-motion:reduce){.pg *,#mu-splash *,#duo-load,#duo-dots *,.upi-dock{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){.pg *,#mu-splash *,#duo-load,#duo-dots *,#mu-splash2 *,.upi-dock{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -1196,22 +1229,26 @@ input,select,textarea{font-size:max(16px,1em)}
 <div id="mu-splash" data-noi18n aria-hidden="true">
   <div class="sp-face"><svg viewBox="72 72 368 368" role="img" aria-label="Math Up"><rect x="84" y="84" width="160" height="160" rx="38" fill="#FFC233" stroke="#14284B" stroke-width="12"/><g fill="#fff" stroke="#14284B" stroke-width="0" stroke-linejoin="round"><rect x="125.0" y="151.0" width="78" height="26" rx="13.0"/><rect x="151.0" y="125.0" width="26" height="78" rx="13.0"/></g><g fill="#fff"><rect x="125.0" y="151.0" width="78" height="26" rx="13.0"/><rect x="151.0" y="125.0" width="26" height="78" rx="13.0"/></g><rect x="268" y="84" width="160" height="160" rx="38" fill="#F26A8B" stroke="#14284B" stroke-width="12"/><rect x="308" y="151" width="80" height="26" rx="13" fill="#fff"/><rect x="84" y="268" width="160" height="160" rx="38" fill="#3FAE5A" stroke="#14284B" stroke-width="12"/><g transform="rotate(45 164 348)"><g fill="#fff" stroke="#14284B" stroke-width="0" stroke-linejoin="round"><rect x="122.0" y="335.0" width="84" height="26" rx="13.0"/><rect x="151.0" y="306.0" width="26" height="84" rx="13.0"/></g><g fill="#fff"><rect x="122.0" y="335.0" width="84" height="26" rx="13.0"/><rect x="151.0" y="306.0" width="26" height="84" rx="13.0"/></g></g><rect x="268" y="268" width="160" height="160" rx="38" fill="#9775FA" stroke="#14284B" stroke-width="12"/><rect x="308" y="335" width="80" height="26" rx="13" fill="#fff"/><circle cx="348" cy="308" r="14" fill="#fff"/><circle cx="348" cy="388" r="14" fill="#fff"/></svg></div>
 </div>
+<div id="mu-splash2" data-noi18n aria-hidden="true"><div class="sp2-word">Math Up</div></div>
 <script>
 // voice speed (lower = slower). tts = the phone's own voice, clip = the recorded voice/*.mp3 files
 window.MU_VOICE = { tts: 0.8, clip: 0.9 };
-// launch screen: just the app icon artwork on blue (like Duolingo), once each time the app is opened
+// launch screens, once each time the app is opened: 1) the app icon on blue, 2) the word "Math Up" on green (like Duolingo)
 (function(){
-  var sp = document.getElementById("mu-splash"); if (!sp) return;
+  var sp = document.getElementById("mu-splash"), sp2 = document.getElementById("mu-splash2"); if (!sp) return;
   var seen = false; try { seen = sessionStorage.getItem("mathup:splash") === "1"; sessionStorage.setItem("mathup:splash", "1"); } catch (e) {}
-  if (seen) { sp.remove(); return; }
+  if (seen) { sp.remove(); if (sp2) sp2.remove(); return; }
   var meta = document.querySelector('meta[name="theme-color"]'), old = meta && meta.content;
-  if (meta) meta.content = "#0A9DFD";                       // phone status bar matches the splash
-  sp.classList.add("on");
-  var t0 = Date.now(), closed = false;
-  var close = function(){ if (closed) return; closed = true; if (meta) meta.content = old; sp.classList.add("out"); setTimeout(function(){ sp.remove(); }, 400); };
-  var ready = function(){ setTimeout(close, Math.max(0, 1300 - (Date.now() - t0))); };   // at least 1.3 s, then as soon as the app has loaded
+  var bar = function(c){ if (meta) meta.content = c; };
+  bar("#0A9DFD");                                         // phone status bar matches the splash
+  sp.classList.add("on"); if (sp2) sp2.classList.add("on");   // the word screen waits underneath
+  var t0 = Date.now(), closed = false, closed2 = false;
+  var close2 = function(){ if (closed2) return; closed2 = true; bar(old); if (sp2){ sp2.classList.add("out"); setTimeout(function(){ sp2.remove(); }, 450); } };
+  var close = function(){ if (closed) return; closed = true; sp.classList.add("out"); setTimeout(function(){ sp.remove(); }, 400);
+    if (sp2){ bar("#58CC02"); setTimeout(close2, 1300); } else bar(old); };
+  var ready = function(){ setTimeout(close, Math.max(0, 1300 - (Date.now() - t0))); };   // icon screen: at least 1.3 s, then the word screen for 1.3 s
   if (document.readyState === "complete") ready(); else addEventListener("load", ready);
-  setTimeout(close, 3500); sp.addEventListener("click", close);
+  setTimeout(close, 3500); sp.addEventListener("click", close); if (sp2) sp2.addEventListener("click", function(){ close(); close2(); });
 })();
 // the "Powered by" footer sits under every page except full-screen games
 (function(){
@@ -1431,7 +1468,7 @@ window.MU_VOICE = { tts: 0.8, clip: 0.9 };
 <template id="tpl-practice"><div class="page"><main>
 
 <section id="home">
-  <div class="top"><span class="stu-slot"></span><a href="#/lessons" id="lessonsLink">Lessons</a></div>
+  <div class="top"><span class="stu-slot"></span><span><a href="#/lessons" id="lessonsLink">Lessons</a><button class="pill" id="out" type="button" hidden>Log out</button></span></div>
   <h1>Let's practise!</h1>
   <div class="sheet today" id="today">
     <p class="date" id="tDate"></p>
@@ -4147,7 +4184,7 @@ const TICON = {
   angle: '<svg viewBox="0 0 24 24"><path d="M4 19.5h16M4 19.5L15 5" fill="none" stroke="#14284B" stroke-width="2.2" stroke-linecap="round"/><path d="M10 19.5a6 6 0 0 0-2.3-4.7" fill="none" stroke="#14284B" stroke-width="1.8"/></svg>'
 };
 const $ = id => __byId(id);
-if (!MU.young()) $("lessonsLink").hidden = true;      // lessons are for ages 4-6 only
+if (!MU.young()){ $("lessonsLink").hidden = true; $("out").hidden = !MU.session(); $("out").onclick = () => MU.logout(); }   // lessons are for ages 4-6 only; ages 7-12 get Log out in that spot
 const COLORS = ["#1F5EFF", "#E8590C", "#E03170", "#16915F", "#7048E8"], DAILY = 2, N = STEPS.length;
 const blank = () => ({ s: {}, d: {}, p: {}, h: {}, m: {}, w: {}, k: {}, cur: 0, pl: 0, day: { d: "", n: 0 }, st: { l: "", n: 0 }, a: [] });
 let P = blank();
@@ -5529,11 +5566,13 @@ if ("serviceWorker" in navigator) window.addEventListener("load", () => navigato
   const sfx = n => { try { window.MUS && MUS.sfx(n); } catch (e) {} };
   // 1) page entrance
   new MutationObserver(() => { const p = app.querySelector(".pg"); if (p && !p.classList.contains("duo-in")) p.classList.add("duo-in"); }).observe(app, { childList: true });
-  // 2) loader: top bar right away, bouncing dots if the server takes over ~1.2 s
-  const bar = mk("duo-load"), dots = mk("duo-dots", "<i></i><i></i><i></i>"); let pend = 0, t1, t2;
+  // 2) loader: the long blue-green-yellow bar shows for every server call; the bouncing dots only while logging in
+  const bar = mk("duo-load"), dots = mk("duo-dots", "<i></i><i></i><i></i>"); let pend = 0, lg = 0, t1, t2;
   const of = window.fetch.bind(window);
-  window.fetch = (...a) => { pend++; clearTimeout(t1); t1 = setTimeout(() => pend && bar.classList.add("on"), 250); clearTimeout(t2); t2 = setTimeout(() => pend && dots.classList.add("on"), 1200);
-    const done = () => { if (--pend <= 0){ pend = 0; clearTimeout(t1); clearTimeout(t2); bar.classList.remove("on"); dots.classList.remove("on"); } };
+  const isLogin = a => { try { const b = a[1] && a[1].body; return typeof b === "string" && /"action"\s*:\s*"(student|parent)Login"/.test(b); } catch (e) { return false; } };
+  window.fetch = (...a) => { const L = isLogin(a); pend++; clearTimeout(t1); t1 = setTimeout(() => pend && bar.classList.add("on"), 250);
+    if (L){ lg++; clearTimeout(t2); t2 = setTimeout(() => lg && dots.classList.add("on"), 1200); }
+    const done = () => { if (L && --lg <= 0){ lg = 0; clearTimeout(t2); dots.classList.remove("on"); } if (--pend <= 0){ pend = 0; clearTimeout(t1); bar.classList.remove("on"); } };
     return of(...a).then(r => { done(); return r; }, e => { done(); throw e; }); };
   // 3) confetti + flying XP chip
   const burst = (x, y, n = 36) => { if (RM) return; const C = ["#58CC02", "#1CB0F6", "#FFC800", "#FF4B4B", "#CE82FF", "#FF9600"];
@@ -5552,7 +5591,7 @@ if ("serviceWorker" in navigator) window.addEventListener("load", () => navigato
     const ws = $(".pg #ws"), inWs = ws && !ws.hidden, dn = $(".pg #done"), inDone = dn && !dn.hidden;
     const typing = /^(INPUT|TEXTAREA)$/.test((document.activeElement || {}).tagName || "");
     const busy = d.classList.contains("touring") || d.classList.contains("coach") || $(".upi-bubble") || $(".upi-menu");
-    const hide = !busy && (["boss", "print", "privacy", "terms"].includes(name) || (inWs && !inDone) || typing || $("#mu-splash.on"));
+    const hide = !busy && (["boss", "print", "privacy", "terms"].includes(name) || (inWs && !inDone) || typing || $("#mu-splash.on,#mu-splash2.on"));
     d.classList.toggle("duo-hide", !!hide);
     if (hide){ shown = false; return; }
     if (!shown || name !== lastPage){ shown = true; lastPage = name; d.classList.remove("duo-peek"); d.classList.remove("duo-pop"); void d.offsetWidth; d.classList.add("duo-pop"); pose("wave"); setTimeout(() => !d.classList.contains("p-cheer") && pose("idle"), 1700); idleAt = Date.now(); }
