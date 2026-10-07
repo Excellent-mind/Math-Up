@@ -1116,11 +1116,11 @@ input,select,textarea{font-size:max(16px,1em)}
 #mu-splash .sp-face svg{width:100%;height:auto;display:block;overflow:visible}
 #mu-splash .sp-big{font:700 clamp(44px,15vw,72px)/1.05 "Fredoka",system-ui,sans-serif;color:#fff;letter-spacing:.01em;text-shadow:0 5px 0 rgba(6,60,140,.35);animation:spPop .7s cubic-bezier(.34,1.56,.64,1) both}
 #mu-splash .sp-small{margin-top:10px;font:600 clamp(20px,6.5vw,30px)/1.2 "Fredoka",system-ui,sans-serif;color:#fff;opacity:.95;animation:spUp .6s .25s ease both}
-/* second launch screen: just the word "Math Up" on Duolingo green, soft white text */
-#mu-splash2{position:fixed;inset:0;z-index:4999;display:none;align-items:center;justify-content:center;background:#58CC02;transition:opacity .4s ease;padding:24px;text-align:center}
+/* second launch screen: just the word "Math Up", same blue as the first launch screen */
+#mu-splash2{position:fixed;inset:0;z-index:4999;display:none;align-items:center;justify-content:center;background:#0A9DFD;transition:opacity .4s ease;padding:24px;text-align:center}
 #mu-splash2.on{display:flex}
 #mu-splash2.out{opacity:0;pointer-events:none}
-#mu-splash2 .sp2-word{font:700 clamp(52px,17vw,92px)/1 "Fredoka",system-ui,sans-serif;letter-spacing:-.01em;color:rgba(255,255,255,.66);white-space:nowrap;user-select:none;-webkit-user-select:none}
+#mu-splash2 .sp2-word{font:700 clamp(52px,17vw,92px)/1 "Fredoka",system-ui,sans-serif;letter-spacing:-.01em;color:rgba(255,255,255,.94);text-shadow:0 4px 0 rgba(6,60,140,.28);white-space:nowrap;user-select:none;-webkit-user-select:none}
 @keyframes spPop{from{transform:scale(.4) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
 @keyframes spUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){#mu-splash *,#mu-splash2 *{animation:none!important}}
@@ -1165,8 +1165,10 @@ input,select,textarea{font-size:max(16px,1em)}
 .pg.duo-in .lv{animation:duoPop .45s var(--d-spring) backwards}
 .pg.duo-in .lv:nth-child(2){animation-delay:.05s}.pg.duo-in .lv:nth-child(3){animation-delay:.1s}.pg.duo-in .lv:nth-child(4){animation-delay:.15s}.pg.duo-in .lv:nth-child(n+5){animation-delay:.2s}
 /* loader: top bar + bouncing dots when the server is slow */
-#duo-load{position:fixed;left:0;right:0;top:0;height:6px;z-index:6000;pointer-events:none;opacity:0;transition:opacity .2s;background:linear-gradient(90deg,transparent,var(--d-blue) 16%,var(--d-green) 50%,var(--d-gold) 84%,transparent) -100% 0/75% 100% no-repeat;animation:duoSweep 1.15s linear infinite}
-#duo-load.on{opacity:1}
+#duo-load{position:fixed;left:0;right:0;top:0;height:3px;z-index:6000;pointer-events:none;overflow:hidden;visibility:hidden;opacity:0;transition:opacity .2s,visibility 0s .2s}
+#duo-load::before{content:"";position:absolute;top:0;bottom:0;left:0;width:80%;border-radius:3px;background:linear-gradient(90deg,transparent 0,var(--d-blue) 18%,var(--d-green) 50%,var(--d-gold) 82%,transparent 100%);transform:translateX(-100%);will-change:transform}
+#duo-load.on{visibility:visible;opacity:1;transition:opacity .15s}
+#duo-load.on::before{animation:duoSweep 1.2s cubic-bezier(.4,0,.6,1) infinite}
 #duo-dots{position:fixed;left:50%;top:40%;z-index:6000;display:none;gap:8px;transform:translateX(-50%);padding:14px 18px;border-radius:18px;background:#fff;border:2px solid var(--d-line);box-shadow:0 4px 0 var(--d-line)}
 #duo-dots.on{display:flex;animation:duoPop .3s var(--d-spring)}
 #duo-dots i{width:12px;height:12px;border-radius:50%;background:var(--d-blue);animation:duoBounce .9s infinite}
@@ -1207,6 +1209,58 @@ input,select,textarea{font-size:max(16px,1em)}
 .pg[data-p="practice"] .pad button:not(.go){border:2px solid var(--d-line);background:#fff;color:var(--d-ink);box-shadow:0 4px 0 var(--d-line);font-weight:700}
 .pg[data-p="practice"] .pad button:not(.go):active{transform:translateY(4px);box-shadow:0 0 0 var(--d-line);background:#fff}
 .pg[data-p="practice"] .pad button.x{background:#FFECEC;color:var(--d-red-d);border-color:#FFC1C1;box-shadow:0 4px 0 #FFC1C1}
+
+/* ===== login: Duolingo-style welcome + "enter your details" ===== */
+.pg[data-p="login"] .page{justify-content:flex-start!important;padding:14px 20px 16px!important}
+.pg[data-p="login"] main{max-width:420px;display:flex;flex-direction:column;flex:1;min-height:0}
+.pg[data-p="login"] .lg-welcome,.pg[data-p="login"] .lg-sign{display:flex;flex-direction:column;flex:1}
+.pg[data-p="login"] .lg-top{display:flex;align-items:center;justify-content:space-between;min-height:44px;margin:0 0 6px}
+.pg[data-p="login"] .lg-top-w{justify-content:flex-end}
+.pg[data-p="login"] .lg-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 0 20px}
+.pg[data-p="login"] .lg-art{width:min(42vw,170px);animation:duoPop .6s var(--d-spring) both}
+.pg[data-p="login"] .lg-art svg{width:100%;height:auto;display:block}
+.pg[data-p="login"] .lg-word{margin:18px 0 6px!important;font:700 clamp(40px,12vw,52px)/1.05 "Fredoka",system-ui,sans-serif!important;letter-spacing:-.01em;color:var(--d-blue)}
+.pg[data-p="login"] .lg-tag{margin:0;font-size:19px;color:#AFAFAF;font-weight:500}
+.pg[data-p="login"] .lg-cta{display:flex;flex-direction:column;gap:16px;padding:0 0 10px}
+.pg[data-p="login"] .btn{width:100%;height:54px!important;text-transform:uppercase;letter-spacing:.07em;font-size:16px!important;font-weight:700!important;border-radius:16px!important}
+.pg[data-p="login"] .btn.lg-have{font-size:15px!important;letter-spacing:.04em!important;white-space:nowrap;background:#fff!important;color:var(--d-blue-d)!important;border:2px solid var(--d-line)!important;box-shadow:0 4px 0 var(--d-line)!important}
+.pg[data-p="login"] .btn.lg-have:active{transform:translateY(4px);box-shadow:0 0 0 var(--d-line)!important}
+.pg[data-p="login"] .btn[disabled]{opacity:1}
+.pg[data-p="login"] .getapp{margin:10px 0 0}
+.pg[data-p="login"] .lg-x{width:44px;height:44px;display:grid;place-items:center;border:0;background:none;color:#AFAFAF;padding:0;cursor:pointer}
+.pg[data-p="login"] .lg-x.lg-sp{cursor:default}
+.pg[data-p="login"] .lg-title{flex:1;margin:0;text-align:center;font:700 20px/1.2 "Fredoka",system-ui,sans-serif;color:#AFAFAF}
+.pg[data-p="login"] .lg-group{border:2px solid var(--d-line);border-radius:16px;background:#F7F7F7;overflow:hidden;margin:12px 0 4px;transition:border-color .15s}
+.pg[data-p="login"] .lg-group:focus-within{border-color:var(--d-blue)}
+.pg[data-p="login"] .lg-row{display:flex;align-items:center;gap:8px;min-height:56px;padding:0 16px}
+.pg[data-p="login"] .lg-row+.lg-row{border-top:2px solid var(--d-line)}
+.pg[data-p="login"] .lg-row input:not([type=checkbox]):not([type=range]){flex:1;min-width:0;height:54px!important;border:0!important;border-radius:0!important;background:transparent!important;padding:0!important;font:500 18px "Fredoka",system-ui,sans-serif;color:var(--d-ink)}
+.pg[data-p="login"] .lg-row input::placeholder{color:#AFAFAF}
+.pg[data-p="login"] .lg-pinrow{padding-right:12px}
+.pg[data-p="login"] .lg-pl{font-weight:500;font-size:18px;color:#AFAFAF;flex:none}
+.pg[data-p="login"] .lg-pinrow .mu-pin{flex:1;padding:0!important;gap:18px;height:54px}
+.pg[data-p="login"] .lg-pinrow .mu-pin .d{border-color:#AFAFAF}
+.pg[data-p="login"] .lg-pinrow .mu-pin .d.on{background:var(--d-ink);border-color:var(--d-ink)}
+.pg[data-p="login"] .lg-pinrow .mu-pin .d.num{background:transparent;border-color:transparent}
+.pg[data-p="login"] .lg-row .toggle:not(.pin-show){position:static!important;border:0!important;box-shadow:none!important;background:none!important;color:var(--d-blue)!important;width:44px;height:44px;padding:0!important;display:grid;place-items:center;margin-right:-10px}
+.pg[data-p="login"] .lg-row .toggle.pin-show{position:static!important;display:block!important;margin:0!important;padding:6px!important;height:auto!important;border:0!important;box-shadow:none!important;background:none!important;color:var(--d-blue)!important;font:700 12.5px "Fredoka",system-ui,sans-serif!important;letter-spacing:.06em;text-transform:uppercase}
+.pg[data-p="login"] .err{padding:0 4px}
+.pg[data-p="login"] #go{margin-top:14px}
+.pg[data-p="login"] .lg-forgot{text-align:center;margin:18px 0 0}
+.pg[data-p="login"] .lg-flink{border:0;background:none;padding:6px 10px;font:700 15px "Fredoka",system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--d-blue)!important;text-decoration:none;cursor:pointer}
+.pg[data-p="login"] .lg-fhelp{margin:6px 0 0;color:#777;font-size:15px}
+.pg[data-p="login"] .lg-bottom{margin-top:auto;padding-top:22px}
+.pg[data-p="login"] .lg-as{margin:0 0 10px;text-align:center;color:#AFAFAF;font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.pg[data-p="login"] .lg-who{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.pg[data-p="login"] .lg-pick{display:flex;align-items:center;justify-content:center;gap:6px;height:54px;min-width:0;padding:0 6px;border:2px solid var(--d-line);border-radius:16px;background:#fff;color:var(--d-ink);box-shadow:0 4px 0 var(--d-line);font:700 12.5px "Fredoka",system-ui,sans-serif;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:transform .08s,box-shadow .08s}
+.pg[data-p="login"] .lg-pick:active{transform:translateY(4px);box-shadow:0 0 0 var(--d-line)}
+.pg[data-p="login"] .lg-pick[aria-selected="true"]{background:#DDF4FF;border-color:var(--d-blue);color:var(--d-blue-d);box-shadow:0 4px 0 var(--d-blue)}
+.pg[data-p="login"] .lg-pick[aria-selected="true"]:active{box-shadow:0 0 0 var(--d-blue)}
+.pg[data-p="login"] .lg-pick svg{flex:none;width:18px;height:18px}.pg[data-p="login"] .lg-pick span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pg[data-p="login"] .lg-terms{margin:18px 0 0;text-align:center;color:#AFAFAF;font-size:14px;line-height:1.45}
+.pg[data-p="login"] .lg-terms a{color:#8E8E8E;font-weight:700;text-decoration:none}
+@media (max-width:400px){.pg[data-p="login"] .lg-pick svg{display:none}}
+@media (max-height:640px){.pg[data-p="login"] .lg-art{width:110px}.pg[data-p="login"] .lg-word{margin-top:10px!important}.pg[data-p="login"] .lg-bottom{padding-top:12px}.pg[data-p="login"] .lg-terms{margin-top:10px}}
 @keyframes duoShine{0%{left:-50%}55%,100%{left:130%}}
 @keyframes duoFlash{50%{box-shadow:0 0 0 6px rgba(255,200,0,.5)}}
 @keyframes duoBadge{0%{transform:scale(1)}30%{transform:scale(1.7) rotate(-10deg)}60%{transform:scale(.9) rotate(6deg)}100%{transform:scale(1)}}
@@ -1215,12 +1269,12 @@ input,select,textarea{font-size:max(16px,1em)}
 @keyframes duoSlide{from{opacity:0;transform:translateY(14px)}}
 @keyframes duoDrop{0%{transform:translateY(-140px) scale(.8,1.2);opacity:0}55%{transform:translateY(0) scale(1.15,.85);opacity:1}75%{transform:scale(.94,1.06)}100%{transform:none}}
 @keyframes duoBoot{to{background-size:100% 100%}}
-@keyframes duoSweep{from{background-position:-100% 0}to{background-position:200% 0}}
+@keyframes duoSweep{from{transform:translateX(-100%)}to{transform:translateX(125%)}}
 @keyframes duoBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}}
 @keyframes duoRise{0%{transform:translateY(10px) scale(.6);opacity:0}20%{transform:scale(1.15);opacity:1}100%{transform:translateY(-70px);opacity:0}}
 @keyframes duoConf{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
 @keyframes duoUp{0%{transform:translateY(90px) scale(.6)}100%{transform:none}}
-@media (prefers-reduced-motion:reduce){.pg *,#mu-splash *,#duo-load,#duo-dots *,#mu-splash2 *,.upi-dock{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){.pg *,#mu-splash *,#duo-load,#duo-dots *,#mu-splash2 *,.upi-dock{animation:none!important;transition:none!important}#duo-load::before{animation:none!important;width:100%;transform:none}}
 </style>
 </head>
 <body>
@@ -1233,7 +1287,7 @@ input,select,textarea{font-size:max(16px,1em)}
 <script>
 // voice speed (lower = slower). tts = the phone's own voice, clip = the recorded voice/*.mp3 files
 window.MU_VOICE = { tts: 0.8, clip: 0.9 };
-// launch screens, once each time the app is opened: 1) the app icon on blue, 2) the word "Math Up" on green (like Duolingo)
+// launch screens, once each time the app is opened: 1) the app icon on blue, 2) the word "Math Up" on the same blue
 (function(){
   var sp = document.getElementById("mu-splash"), sp2 = document.getElementById("mu-splash2"); if (!sp) return;
   var seen = false; try { seen = sessionStorage.getItem("mathup:splash") === "1"; sessionStorage.setItem("mathup:splash", "1"); } catch (e) {}
@@ -1245,7 +1299,7 @@ window.MU_VOICE = { tts: 0.8, clip: 0.9 };
   var t0 = Date.now(), closed = false, closed2 = false;
   var close2 = function(){ if (closed2) return; closed2 = true; bar(old); if (sp2){ sp2.classList.add("out"); setTimeout(function(){ sp2.remove(); }, 450); } };
   var close = function(){ if (closed) return; closed = true; sp.classList.add("out"); setTimeout(function(){ sp.remove(); }, 400);
-    if (sp2){ bar("#58CC02"); setTimeout(close2, 1300); } else bar(old); };
+    if (sp2) setTimeout(close2, 1300); else bar(old); };
   var ready = function(){ setTimeout(close, Math.max(0, 1300 - (Date.now() - t0))); };   // icon screen: at least 1.3 s, then the word screen for 1.3 s
   if (document.readyState === "complete") ready(); else addEventListener("load", ready);
   setTimeout(close, 3500); sp.addEventListener("click", close); if (sp2) sp2.addEventListener("click", function(){ close(); close2(); });
@@ -1258,59 +1312,21 @@ window.MU_VOICE = { tts: 0.8, clip: 0.9 };
   new MutationObserver(sync).observe(app, { childList: true }); sync();
 })();
 </script>
-<template id="tpl-login"><div class="page">
+<template id="tpl-login"><div class="page" data-view="welcome">
   <main>
-    <div class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><defs><linearGradient id="bmG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3D7BFF"/><stop offset="1" stop-color="#1A4FE0"/></linearGradient></defs><rect x="1.5" y="1.5" width="45" height="45" rx="13" fill="url(#bmG)"/><path d="M8 9.5q8-5 20-4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".35"/><rect x="9.5" y="27" width="7.5" height="11.5" rx="2.2" fill="#fff"/><rect x="20.25" y="20.5" width="7.5" height="18" rx="2.2" fill="#fff"/><rect x="31" y="14" width="7.5" height="24.5" rx="2.2" fill="#fff"/><path d="M34.75 3.5l1.9 4.1 4.5.5-3.35 3 .95 4.4-4-2.3-4 2.3.95-4.4-3.35-3 4.5-.5z" fill="#FFD43B" stroke="#14284B" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="brand-text"><b>Math Up</b><small>Maths practice · Ages 4–12</small></span></div><div data-noi18n><button type="button" class="langsw" role="switch" aria-checked="false" aria-label="Language: English / Bahasa Melayu"><span>EN</span><span>BM</span></button></div></div>
-
-    <div class="sheet">
-      <h1>Let's practice!</h1>
-      <p class="sub">Log in to start today's worksheet.</p>
-
-      <div class="tabs" role="tablist" aria-label="Who is logging in?">
-        <button type="button" role="tab" id="t-stu" aria-selected="true" aria-controls="p-stu">I'm a student</button>
-        <button type="button" role="tab" id="t-par" aria-selected="false" aria-controls="p-par">I'm a parent</button>
+    <!-- 1) welcome screen -->
+    <section class="lg-welcome" id="lgWelcome">
+      <div class="lg-top lg-top-w"><div data-noi18n><button type="button" class="langsw" role="switch" aria-checked="false" aria-label="Language: English / Bahasa Melayu"><span>EN</span><span>BM</span></button></div></div>
+      <div class="lg-hero">
+        <div class="lg-art"><svg viewBox="72 72 368 368" aria-hidden="true"><rect x="84" y="84" width="160" height="160" rx="38" fill="#FFC233" stroke="#14284B" stroke-width="12"/><g fill="#fff" stroke="#14284B" stroke-width="0" stroke-linejoin="round"><rect x="125.0" y="151.0" width="78" height="26" rx="13.0"/><rect x="151.0" y="125.0" width="26" height="78" rx="13.0"/></g><g fill="#fff"><rect x="125.0" y="151.0" width="78" height="26" rx="13.0"/><rect x="151.0" y="125.0" width="26" height="78" rx="13.0"/></g><rect x="268" y="84" width="160" height="160" rx="38" fill="#F26A8B" stroke="#14284B" stroke-width="12"/><rect x="308" y="151" width="80" height="26" rx="13" fill="#fff"/><rect x="84" y="268" width="160" height="160" rx="38" fill="#3FAE5A" stroke="#14284B" stroke-width="12"/><g transform="rotate(45 164 348)"><g fill="#fff" stroke="#14284B" stroke-width="0" stroke-linejoin="round"><rect x="122.0" y="335.0" width="84" height="26" rx="13.0"/><rect x="151.0" y="306.0" width="26" height="84" rx="13.0"/></g><g fill="#fff"><rect x="122.0" y="335.0" width="84" height="26" rx="13.0"/><rect x="151.0" y="306.0" width="26" height="84" rx="13.0"/></g></g><rect x="268" y="268" width="160" height="160" rx="38" fill="#9775FA" stroke="#14284B" stroke-width="12"/><rect x="308" y="335" width="80" height="26" rx="13" fill="#fff"/><circle cx="348" cy="308" r="14" fill="#fff"/><circle cx="348" cy="388" r="14" fill="#fff"/></svg></div>
+        <h1 class="lg-word" data-noi18n>Math Up</h1>
+        <p class="lg-tag">Maths practice · Ages 4–12</p>
       </div>
-
-      <form id="f" novalidate>
-        <div id="p-stu" role="tabpanel" aria-labelledby="t-stu">
-          <div class="field">
-            <label for="sid">Student ID</label>
-            <input id="sid" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Your student ID" aria-describedby="e1">
-            <p class="err" id="e1"></p>
-          </div>
-          <div class="field">
-            <div class="lrow"><label for="pin">PIN (4 numbers)</label><button type="button" class="toggle pin-show" data-for="pin" aria-pressed="false">Show PIN</button></div>
-            <input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" aria-describedby="e2">
-            <p class="err" id="e2"></p>
-          </div>
-          <p class="help">Forgot your PIN? Ask a parent to reset it.</p>
-        </div>
-
-        <div id="p-par" role="tabpanel" aria-labelledby="t-par" hidden>
-          <div class="field">
-            <label for="email">Email</label>
-            <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" aria-describedby="e3">
-            <p class="err" id="e3"></p>
-          </div>
-          <div class="field">
-            <label for="pw">Password</label>
-            <div class="control">
-              <input id="pw" type="password" autocomplete="current-password" placeholder="Your password" aria-describedby="e4">
-              <button type="button" class="toggle eye" data-for="pw" aria-pressed="false" aria-label="Show password"></button>
-            </div>
-            <p class="err" id="e4"></p>
-          </div>
-          <p class="help"><a href="#/forgot">Forgot password?</a></p>
-        </div>
-
-        <button class="btn" id="go" type="submit">Log in</button>
-        <p class="status" id="st" role="status" aria-live="polite"></p>
-      </form>
-    </div>
-
-    <p class="alt">Parents: <a href="#/signup">create an account</a> to add your child.</p>
-
-    <section class="getapp" id="getapp" aria-label="Install Math Up" hidden>
+      <div class="lg-cta">
+        <button type="button" class="btn" id="lgStart">Get started</button>
+        <button type="button" class="btn lg-have" id="lgHave">I already have an account</button>
+      </div>
+      <section class="getapp" id="getapp" aria-label="Install Math Up" hidden>
       <p class="ga-t">Install Math Up</p>
       <p class="ga-s">Add it to your phone. It opens like an app and works without internet.</p>
       <button type="button" class="ga-install" id="gaInstall"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v11m0 0l-4-4m4 4l4-4M5 18v1.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Install app</span></button>
@@ -1328,6 +1344,41 @@ window.MU_VOICE = { tts: 0.8, clip: 0.9 };
         </ol>
       </div>
       <p class="ga-done" id="gaDone" role="status" hidden>Math Up is installed. Find it on your home screen.</p>
+    </section>
+    </section>
+
+    <!-- 2) enter your details -->
+    <section class="lg-sign" id="lgSign" hidden>
+      <div class="lg-top"><button type="button" class="lg-x" id="lgX" aria-label="Back"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button><h2 class="lg-title">Enter your details</h2><span class="lg-x lg-sp" aria-hidden="true"></span></div>
+      <form id="f" novalidate>
+        <div id="p-stu" role="tabpanel" aria-labelledby="t-stu">
+          <div class="lg-group">
+            <div class="lg-row"><input id="sid" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Your student ID" aria-label="Student ID" aria-describedby="e1"></div>
+            <div class="lg-row lg-pinrow"><span class="lg-pl">PIN</span><input id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" aria-label="PIN (4 numbers)" aria-describedby="e2"><button type="button" class="toggle pin-show" data-for="pin" aria-pressed="false">Show PIN</button></div>
+          </div>
+          <p class="err" id="e1"></p><p class="err" id="e2"></p>
+        </div>
+        <div id="p-par" role="tabpanel" aria-labelledby="t-par" hidden>
+          <div class="lg-group">
+            <div class="lg-row"><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="Email" aria-label="Email" aria-describedby="e3"></div>
+            <div class="lg-row"><input id="pw" type="password" autocomplete="current-password" placeholder="Your password" aria-label="Password" aria-describedby="e4"><button type="button" class="toggle eye" data-for="pw" aria-pressed="false" aria-label="Show password"></button></div>
+          </div>
+          <p class="err" id="e3"></p><p class="err" id="e4"></p>
+        </div>
+        <button class="btn" id="go" type="submit" disabled>Log in</button>
+        <p class="status" id="st" role="status" aria-live="polite"></p>
+      </form>
+      <div class="lg-forgot" id="f-stu"><button type="button" class="lg-flink" id="pinHelpBtn">Forgot PIN?</button><p class="lg-fhelp" id="pinHelp" hidden>Forgot your PIN? Ask a parent to reset it.</p></div>
+      <div class="lg-forgot" id="f-par" hidden><a class="lg-flink" href="#/forgot">Forgot password?</a></div>
+
+      <div class="lg-bottom">
+        <p class="lg-as">Log in as</p>
+        <div class="lg-who" role="tablist" aria-label="Who is logging in?">
+          <button type="button" class="lg-pick" role="tab" id="t-stu" aria-selected="true" aria-controls="p-stu"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="currentColor"/></svg><span>Student login</span></button>
+          <button type="button" class="lg-pick" role="tab" id="t-par" aria-selected="false" aria-controls="p-par"><svg viewBox="0 0 28 24" width="26" height="22" aria-hidden="true"><circle cx="9" cy="7.5" r="3.6" fill="currentColor"/><path d="M2 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5z" fill="currentColor"/><circle cx="19.5" cy="10" r="2.8" fill="currentColor"/><path d="M15.5 21c0-3.2 1.8-5.2 4.8-5.2s5 2 5 5.2z" fill="currentColor"/></svg><span>Parent login</span></button>
+        </div>
+        <p class="lg-terms">By logging in to Math Up, you agree to our <a href="#/terms">Terms</a> and <a href="#/privacy">Privacy Policy</a>.</p>
+      </div>
     </section>
   </main>
 </div></template>
@@ -1869,6 +1920,7 @@ const EXACT = {
   "Me": "Saya", "Background colour": "Warna latar", "More backgrounds are in the Store.": "Lagi banyak latar ada di Kedai.", "Backgrounds": "Latar", "Using": "Dipakai",
   "Earn stars from worksheets, lessons and Boss Battles, then unlock special backgrounds.": "Kumpul bintang dari kertas latihan, pelajaran dan Lawan Bos, kemudian buka latar istimewa.",
   "I'm a student": "Saya murid", "I'm a parent": "Saya ibu bapa", "Student ID": "ID murid", "PIN (4 numbers)": "PIN (4 nombor)", "Show PIN": "Tunjuk PIN", "Show": "Tunjuk", "Log in": "Log masuk",
+  "Get started": "Mula", "I already have an account": "Saya sudah ada akaun", "Enter your details": "Masukkan butiran anda", "Student login": "Log masuk murid", "Parent login": "Log masuk ibu bapa", "Log in as": "Log masuk sebagai", "Forgot PIN?": "Lupa PIN?", "By logging in to Math Up, you agree to our": "Dengan log masuk ke Math Up, anda bersetuju dengan", "Kids tap Student login. Grown-ups tap Parent login.": "Murid tekan Log masuk murid. Ibu bapa tekan Log masuk ibu bapa.",
   "Forgot your PIN? Ask a parent to reset it.": "Lupa PIN? Minta ibu bapa set semula.", "Log in to start today's worksheet.": "Log masuk untuk mula kertas latihan hari ini.", "Password": "Kata laluan", "Install Math Up": "Pasang Math Up", "Add it to your phone. It opens like an app and works without internet.": "Tambah ke telefon anda. Ia dibuka seperti aplikasi dan berfungsi tanpa internet.", "Install app": "Pasang aplikasi", "Open this page in Safari first.": "Buka halaman ini dalam Safari dahulu.", "Tap the Share button": "Ketik butang Kongsi", "Choose Add to Home Screen": "Pilih Tambah ke Skrin Utama", "Tap Add": "Ketik Tambah", "Tap the menu (three dots)": "Ketik menu (tiga titik)", "Choose Install app or Add to Home screen": "Pilih Pasang aplikasi atau Tambah ke skrin utama", "Tap Install": "Ketik Pasang", "Math Up is installed. Find it on your home screen.": "Math Up telah dipasang. Cari di skrin utama anda.",  "Forgot password?": "Lupa kata laluan?",
   "Parents:": "Ibu bapa:", "create an account": "buat akaun", "to add your child.": "untuk tambah anak anda.", "Type your student ID.": "Taip ID murid kamu.", "Your PIN is 4 numbers.": "PIN kamu 4 nombor.",
   "Couldn't log in. Try again.": "Tak dapat log masuk. Cuba lagi.", "Couldn't reach the server. Check your connection and try again.": "Tak dapat sambung ke pelayan. Semak internet dan cuba lagi.",
@@ -3612,14 +3664,34 @@ async function handleLogin(mode, id, secret){
   return r.ok ? { ok: true } : { ok: false, error: r.error || "Couldn't log in. Try again." };
 }
 
+// the Log in button stays grey until both boxes are filled (like Duolingo)
+function sync(){
+  const ok = mode === "student" ? ($("sid").value.trim() && $("pin").value.length === 4) : ($("email").value.trim() && $("pw").value);
+  if ($("go").textContent === "Log in" || $("go").textContent === "Log masuk") $("go").disabled = !ok;
+}
 function setMode(m){
   mode = m;
   const stu = m === "student";
   $("t-stu").setAttribute("aria-selected", String(stu));
   $("t-par").setAttribute("aria-selected", String(!stu));
   $("p-stu").hidden = !stu; $("p-par").hidden = stu;
-  $("st").textContent = "";
+  $("f-stu").hidden = !stu; $("f-par").hidden = stu;
+  $("st").textContent = ""; sync();
 }
+// two screens: welcome (Get started / I already have an account) and Enter your details
+function view(v){
+  $("lgWelcome").hidden = v !== "welcome"; $("lgSign").hidden = v !== "sign";
+  __root.querySelector(".page").dataset.view = v; window.scrollTo(0, 0);
+}
+$("lgStart").onclick = () => LK.go("signup");
+$("lgHave").onclick = () => { view("sign"); const first = typeof Upi !== "undefined" && Upi.seen && !Upi.seen("login");
+  if (first && window.UPI_TOUR) { setTimeout(() => window.UPI_TOUR("login"), 450); return; }
+  setTimeout(() => { sync(); const f = mode === "parent" ? ($("email").value ? $("pw") : $("email")) : ($("sid").value ? $("pin") : $("sid")); f.focus(); }, 250); };
+$("lgX").onclick = () => { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); view("welcome"); };
+$("pinHelpBtn").onclick = () => { $("pinHelp").hidden = !$("pinHelp").hidden; };
+__root.querySelector(".lg-pinrow").onclick = e => { if (!e.target.closest(".toggle")) $("pin").focus(); };
+["sid", "pin", "email", "pw"].forEach(id => { $(id).addEventListener("input", sync); $(id).addEventListener("change", sync); });
+setInterval(sync, 500);                                    // also catches the phone's own autofill
 // Already logged in on this phone? Go straight in (works offline too).
 { const s = MU.session(); if (s && s.token) LK.go(s.role === "student" ? "lessons.html" : "dashboard.html", true); }
 MU.pinDots($("pin"));
@@ -3628,7 +3700,8 @@ MU.pinDots($("pin"));
   if (l.sid) $("sid").value = l.sid;
   if (l.email) $("email").value = l.email;
   if (l.mode === "parent") setMode("parent");
-  setTimeout(() => { if (l.mode === "parent" && l.email) $("pw").focus(); else if (l.sid) $("pin").focus(); }, 300);
+  sync();
+  if (l.sid || l.email){ view("sign"); setTimeout(() => { if (l.mode === "parent" && l.email) $("pw").focus(); else if (l.sid) $("pin").focus(); }, 300); }   // known phone: straight to the details
 }
 $("t-stu").onclick = () => setMode("student");
 $("t-par").onclick = () => setMode("parent");
@@ -3672,7 +3745,7 @@ $("f").onsubmit = async e => {
   } catch (err) {
     $("st").textContent = "Couldn't reach the server. Check your connection and try again.";
   }
-  $("go").disabled = false; $("go").textContent = "Log in";
+  $("go").textContent = "Log in"; sync();
 };
 
 // English / Bahasa Melayu
@@ -5406,8 +5479,8 @@ home();
   const visible = sel => { const e = document.querySelector('.pg ' + sel); return !!(e && e.offsetParent !== null && !e.closest("[hidden]")); };
   const STEPS = {
     login: [
-      { text: "Hi! I'm Upi, your Math Up buddy. Let me show you how to start!", pose: "wave" },
-      { el: ".tabs", text: "Kids tap “I'm a student”. Grown-ups tap “I'm a parent”." },
+      { text: "Hi! I'm Upi, your Math Up buddy. Let me show you how to start!", pose: "wave", when: () => !!document.querySelector(".pg .lg-sign:not([hidden])") },
+      { el: ".lg-who", text: "Kids tap Student login. Grown-ups tap Parent login." },
       { el: "#sid", text: "Type your student ID here. Your parent can find it on their page." },
       { el: ".mu-pin", text: "Then your secret 4-number PIN. Watch the dots fill up!" },
       { el: "#go", text: "Tap Log in, and let's learn together!" }
@@ -5444,7 +5517,7 @@ home();
     ]
   };
   const placing = () => /level/i.test(((document.querySelector(".pg #tGo") || {}).textContent) || "");
-  const steps = r => (STEPS[r] || []).filter(x => !x.el || visible(x.el)).map(x => Object.assign({}, x, { text: typeof x.text === "function" ? x.text() : x.text }, x.el ? { el: '.pg ' + x.el } : {}));
+  const steps = r => (STEPS[r] || []).filter(x => (!x.el || visible(x.el)) && (!x.when || x.when())).map(x => Object.assign({}, x, { text: typeof x.text === "function" ? x.text() : x.text }, x.el ? { el: '.pg ' + x.el } : {}));
   const menu = [
     { icon: "compass", color: "#1F5EFF", label: "Show me around", run: () => { const st = steps(route()); if (st.length) Upi.tour(route(), st, { menu }); else bot.say("This screen is easy. You've got this!", { pose: "cheer" }); } },
     { icon: "target", color: "#E8590C", label: "Today's mission", run: mission },
@@ -5573,7 +5646,9 @@ if ("serviceWorker" in navigator) window.addEventListener("load", () => navigato
   window.fetch = (...a) => { const L = isLogin(a); pend++; clearTimeout(t1); t1 = setTimeout(() => pend && bar.classList.add("on"), 250);
     if (L){ lg++; clearTimeout(t2); t2 = setTimeout(() => lg && dots.classList.add("on"), 1200); }
     const done = () => { if (L && --lg <= 0){ lg = 0; clearTimeout(t2); dots.classList.remove("on"); } if (--pend <= 0){ pend = 0; clearTimeout(t1); bar.classList.remove("on"); } };
-    return of(...a).then(r => { done(); return r; }, e => { done(); throw e; }); };
+    let p; try { p = of(...a); } catch (e) { done(); throw e; }
+    const wd = setTimeout(() => once(), 70000); const once = (() => { let f = 0; return () => { if (!f){ f = 1; clearTimeout(wd); done(); } }; })();
+    return p.then(r => { once(); return r; }, e => { once(); throw e; }); };
   // 3) confetti + flying XP chip
   const burst = (x, y, n = 36) => { if (RM) return; const C = ["#58CC02", "#1CB0F6", "#FFC800", "#FF4B4B", "#CE82FF", "#FF9600"];
     for (let i = 0; i < n; i++){ const c = document.createElement("i"); c.className = "duo-c"; const a = Math.random() * 6.28, d = 90 + Math.random() * 190;
@@ -5593,6 +5668,11 @@ if ("serviceWorker" in navigator) window.addEventListener("load", () => navigato
     const busy = d.classList.contains("touring") || d.classList.contains("coach") || $(".upi-bubble") || $(".upi-menu");
     const hide = !busy && (["boss", "print", "privacy", "terms"].includes(name) || (inWs && !inDone) || typing || $("#mu-splash.on,#mu-splash2.on"));
     d.classList.toggle("duo-hide", !!hide);
+    // login screens: float Upi in the free space above the buttons, never over them
+    if (name === "login" && !busy){
+      const a = [".lg-bottom", ".lg-cta"].map(q => app.querySelector(q)).find(e => e && e.offsetParent !== null);
+      if (a){ const top = a.getBoundingClientRect().top; d.style.setProperty("bottom", Math.max(8, Math.round(innerHeight - top + 8)) + "px", "important"); }
+    } else d.style.removeProperty("bottom");
     if (hide){ shown = false; return; }
     if (!shown || name !== lastPage){ shown = true; lastPage = name; d.classList.remove("duo-peek"); d.classList.remove("duo-pop"); void d.offsetWidth; d.classList.add("duo-pop"); pose("wave"); setTimeout(() => !d.classList.contains("p-cheer") && pose("idle"), 1700); idleAt = Date.now(); }
     const idle = Date.now() - idleAt;
