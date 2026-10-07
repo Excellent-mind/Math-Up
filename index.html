@@ -1280,6 +1280,23 @@ input,select,textarea{font-size:max(16px,1em)}
 .pg[data-p="lessons"] .hb.boss .hb-go{background:#FFC800;box-shadow:0 3px 0 #E5B400;color:#5B3D00}
 .pg[data-p="login"] .lg-art{animation:none!important;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .pg[data-p="login"] .lg-tile{will-change:transform}
+.pg[data-p="login"] .lg-row .toggle.eye{transform:none!important;top:auto!important;right:auto!important}
+.pg[data-p="login"] .lg-row .toggle.eye:active{transform:scale(.92)!important}
+
+/* ===== Upi: soft, smooth movement + a tidy drawer ===== */
+.upi.upi-dock{transition:opacity .5s ease,transform .8s cubic-bezier(.22,1,.36,1),left .8s cubic-bezier(.22,1,.36,1),top .8s cubic-bezier(.22,1,.36,1),bottom .8s cubic-bezier(.22,1,.36,1)}
+.upi-dock.duo-pop{animation:duoUp .9s cubic-bezier(.22,1,.36,1)!important}
+@keyframes duoUp{0%{transform:translateY(36px) scale(.86);opacity:0}100%{transform:none;opacity:1}}
+.upi.upi-dock.p-wave .u-armR{animation-duration:.9s!important}
+@keyframes uMenuIn{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes uMenuOut{to{opacity:0;transform:translateY(8px) scale(.97)}}
+body .upi-menu{gap:8px!important;transition:top .35s cubic-bezier(.22,1,.36,1),right .35s cubic-bezier(.22,1,.36,1)!important;animation:uMenuIn .38s cubic-bezier(.22,1,.36,1) both!important;transform-origin:100% 100%}
+body .upi-menu.out{animation:uMenuOut .2s ease-in both!important;pointer-events:none}
+body .upi-menu button{height:auto!important;min-height:0!important;margin:0!important;gap:10px!important;padding:6px 16px 6px 6px!important;border:2px solid #E5E5E5!important;border-radius:16px!important;background:#fff!important;color:#3C3C3C!important;box-shadow:0 4px 0 #E5E5E5!important;font:600 15px/1.2 "Fredoka",system-ui,sans-serif!important;animation:uMenuIn .38s cubic-bezier(.22,1,.36,1) both}
+body .upi-menu button:nth-child(2){animation-delay:.03s}body .upi-menu button:nth-child(3){animation-delay:.06s}body .upi-menu button:nth-child(4){animation-delay:.09s}body .upi-menu button:nth-child(5){animation-delay:.12s}body .upi-menu button:nth-child(6){animation-delay:.15s}
+body .upi-menu button:active{transform:translateY(4px)!important;box-shadow:0 0 0 #E5E5E5!important}
+body .upi-menu .mi{width:36px!important;height:36px!important;border:0!important;border-radius:11px!important}
+body .upi-menu .mi svg{width:21px!important;height:21px!important}
 @keyframes duoShine{0%{left:-50%}55%,100%{left:130%}}
 @keyframes duoFlash{50%{box-shadow:0 0 0 6px rgba(255,200,0,.5)}}
 @keyframes duoBadge{0%{transform:scale(1)}30%{transform:scale(1.7) rotate(-10deg)}60%{transform:scale(.9) rotate(6deg)}100%{transform:scale(1)}}
@@ -1292,7 +1309,7 @@ input,select,textarea{font-size:max(16px,1em)}
 @keyframes duoBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}}
 @keyframes duoRise{0%{transform:translateY(10px) scale(.6);opacity:0}20%{transform:scale(1.15);opacity:1}100%{transform:translateY(-70px);opacity:0}}
 @keyframes duoConf{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
-@keyframes duoUp{0%{transform:translateY(90px) scale(.6)}100%{transform:none}}
+
 @media (prefers-reduced-motion:reduce){.pg *,#mu-splash *,#duo-load,#duo-dots *,#mu-splash2 *,.upi-dock{animation:none!important;transition:none!important}#duo-load::before{animation:none!important;width:100%;transform:none}}
 </style>
 </head>
@@ -3372,7 +3389,7 @@ const Upi = (() => {
     dockBot = create(document.body, { dock: true });
     dockBot.el.setAttribute("role", "button"); dockBot.el.setAttribute("tabindex", "0"); dockBot.el.setAttribute("aria-label", `${NAME}: tap for help`);
     let open = null;
-    const close = () => { if (open){ open.remove(); open = null; } };
+    const close = () => { if (open){ const o = open; open = null; o.classList.add("out"); setTimeout(() => o.remove(), 200); } };
     const toggle = () => {
       if (dockBot.el.classList.contains("touring")) return;
       if (open) return close();
@@ -3383,10 +3400,11 @@ const Upi = (() => {
       open.onclick = e => { const b = e.target.closest("[data-i]"); if (!b) return; close(); items[+b.dataset.i].run(); };
       document.body.appendChild(open);
       // anchor the drawer to the robot: below it when the robot is up top, above it when the robot is down low
-      { const r = dockBot.el.getBoundingClientRect(), h = open.offsetHeight, vh = innerHeight, m = 10;
+      const place = () => { if (!open) return; const r = dockBot.el.getBoundingClientRect(), h = open.offsetHeight, vh = innerHeight, m = 10;
         open.style.right = Math.max(m, innerWidth - r.right) + "px"; open.style.bottom = "auto";
         open.style.top = Math.max(m, Math.min(vh - h - m, r.top + r.height / 2 < vh / 2 ? r.bottom + 8 : r.top - h - 8)) + "px";
-        const mr = open.getBoundingClientRect(); if (mr.left < m) open.style.right = Math.max(m, innerWidth - r.right - (m - mr.left)) + "px"; }
+        const mr = open.getBoundingClientRect(); if (mr.left < m) open.style.right = Math.max(m, innerWidth - r.right - (m - mr.left)) + "px"; };
+      place(); { const me = open; setTimeout(() => { if (open === me) place(); }, 520); setTimeout(() => { if (open === me) place(); }, 1000); }   // Upi is still settling when the drawer opens: follow it
       dockBot.pose("wave"); setTimeout(() => dockBot.pose("idle"), 1400);
     };
     dockBot.el.onclick = toggle; dockBot.el.onkeydown = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); } };
@@ -5719,7 +5737,7 @@ if ("serviceWorker" in navigator) window.addEventListener("load", () => navigato
     const hide = !busy && (["boss", "print", "privacy", "terms"].includes(name) || (inWs && !inDone) || typing || $("#mu-splash.on,#mu-splash2.on"));
     d.classList.toggle("duo-hide", !!hide);
     // login screens: float Upi in the free space above the buttons, never over them
-    if (name === "login" && !busy){
+    if (name === "login" && !d.classList.contains("touring") && !d.classList.contains("coach")){
       const a = [".lg-bottom", ".lg-cta"].map(q => app.querySelector(q)).find(e => e && e.offsetParent !== null);
       if (a){ const top = a.getBoundingClientRect().top; d.style.setProperty("bottom", Math.max(8, Math.round(innerHeight - top + 8)) + "px", "important"); }
     } else d.style.removeProperty("bottom");
